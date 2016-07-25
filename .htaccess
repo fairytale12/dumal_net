@@ -30,3 +30,8 @@ ErrorDocument 404 /404.php
   ExpiresByType text/css "access plus 3 day"
   ExpiresByType application/javascript "access plus 3 day"  
 </IfModule>
+
+AuthType Basic
+AuthName "Hello! Who is here?"
+AuthUserFile /home/bitrix/.htpasswd
+require valid-user
