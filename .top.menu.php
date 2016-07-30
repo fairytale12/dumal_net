@@ -1,20 +1,39 @@
 <?
 $aMenuLinks = Array(
-
 	Array(
-		"Главная", 
-		"/", 
+		"Магазин программ", 
+		"/programs/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
-
 	Array(
-		"Профиль", 
-		"/personal/", 
+		"Статьи", 
+		"/articles/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
+	Array(
+		"Видео", 
+		"/video/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Личный кабинет", 
+		"/account/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"О нас", 
+		"/about/", 
+		Array(), 
+		Array(), 
+		"" 
+	)
 );
 ?>
