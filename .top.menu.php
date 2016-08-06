@@ -22,18 +22,20 @@ $aMenuLinks = Array(
 		"" 
 	),
 	Array(
-		"Личный кабинет", 
-		"/account/", 
-		Array(), 
-		Array(), 
-		"" 
-	),
-	Array(
 		"О нас", 
 		"/about/", 
 		Array(), 
 		Array(), 
 		"" 
-	)
+	),
+	Array(
+		"Личный кабинет", 
+		"/account/", 
+		Array(), 
+		Array(
+			'CLASS' => 'user-menu-account'
+		), 
+		'$GLOBALS[\'USER\']->isAuthorized()'
+	),
 );
 ?>

@@ -15,4 +15,19 @@
 .dropdown-menu>.active>a:focus, 
 .dropdown-menu>.active>a:hover {
 	background: none;
+	color: #ff6600;
+}
+
+.fancybox-wrap {
+	border: 2px solid #dadada;
+}
+
+.iframe-body {
+	background-color: #fff;
+	width: 400px;
+	padding: 15px;
+}
+
+.text-right {
+	float: right;
 }

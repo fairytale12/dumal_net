@@ -8,6 +8,8 @@
 		
 		<meta name="google-site-verification" content="orTfP-fmP9E8CUpe0vMzVJtOuwuSbnWjaS4ztDRH8YY" />
 		
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
 		<?$APPLICATION->ShowHead();?>
 		<!-- Favicon -->
@@ -41,12 +43,14 @@
 
 		<!-- Theme CSS -->
 		<?Asset::getInstance()->addCss('/css/style.css');?>
+		<?Asset::getInstance()->addCss('/css/fancybox/jquery.fancybox.css');?>
 		<?Asset::getInstance()->addCss('/css/dev.css');?>
 		
 		<?Asset::getInstance()->addJs('/js/jquery-1.11.2.min.js');?>
 		<?Asset::getInstance()->addJs('/js/modernizr.min.js');?>
 		<?Asset::getInstance()->addJs('/plugins/bootstrap/js/bootstrap.js');?>
 		<?Asset::getInstance()->addJs('/js/jquery.pjax.js');?>
+		<?Asset::getInstance()->addJs('/js/jquery.fancybox.pack.js');?>
 		<?Asset::getInstance()->addJs('/js/plugins.js');?>
 		<?Asset::getInstance()->addJs('/js/script.js');?>
 		
@@ -89,7 +93,7 @@
 												"ALLOW_MULTI_SELECT" => "Y",
 												"CHILD_MENU_TYPE" => "left",
 												"DELAY" => "N",
-												"MAX_LEVEL" => "3",
+												"MAX_LEVEL" => "2",
 												"MENU_CACHE_GET_VARS" => array(""),
 												"MENU_CACHE_TIME" => "3600",
 												"MENU_CACHE_TYPE" => "N",
@@ -98,12 +102,22 @@
 												"USE_EXT" => "Y"
 											)
 										);?>
-
+										
 										<div class="header-right">
 											<div class="social-icons">
+												
+												<?if(!$GLOBALS['USER']->isAuthorized()):?>
+												
+													<a href="javascript:void(0);" onclick="return ftHelper.showLoginForm();">Войти</a>
+													<a href="javascript:void(0);" onclick="return ftHelper.showRegistration();">Регистрация</a>
+													
+												<?endif;?>
+												<a href="#" data-toggle="tooltip" data-placement="bottom" title="ВКонтакте"><i class="fa fa-vk fa-lg"></i></a>
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook fa-lg"></i></a>
+												<!--
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter fa-lg"></i></a>
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Google+"><i class="fa fa-google-plus fa-lg"></i></a>
+												-->
 												<!-- Only for Fixed Sidebar Layout -->
 												<a href="#" class="fixed-button navbar-toggle" id="fixed-button">
 													<i></i>

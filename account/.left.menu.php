@@ -1,6 +1,13 @@
 <?
 $aMenuLinks = Array(
 	Array(
+		"Лента новостей", 
+		"/account/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
 		"Мои программы", 
 		"/account/programs/", 
 		Array(), 
@@ -12,6 +19,15 @@ $aMenuLinks = Array(
 		"/account/diary/", 
 		Array(), 
 		Array(), 
+		"" 
+	),
+	Array(
+		"Выйти", 
+		'/?logout=yes', 
+		Array(), 
+		Array(
+			'NOT_PJAX' => true
+		), 
 		"" 
 	)
 );

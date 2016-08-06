@@ -2,12 +2,16 @@
 namespace ft;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\EventManager;
+use Bitrix\Main\Loader;
 
-$eventManager = \Bitrix\Main\EventManager::getInstance();
+$eventManager = EventManager::getInstance();
 
-$eventManager->addEventHandlerCompatible('main', 'OnEndBufferContent', array('ft\CMain', 'endBufferContent'));
+$eventManager->addEventHandlerCompatible('main', 'OnEndBufferContent', array('ft\CMainHandlers', 'endBufferContent'));
+$eventManager->addEventHandlerCompatible('main', 'OnBeforeUserAdd', array('ft\CMainHandlers', 'OnBeforeUserAdd'));
+$eventManager->addEventHandlerCompatible('main', 'OnBeforeUserUpdate', array('ft\CMainHandlers', 'OnBeforeUserUpdate'));
 
-class CMain {
+class CMainHandlers {
 	
 	public static function endBufferContent(&$buffer) {
         $app = Application::getInstance();
@@ -22,6 +26,29 @@ class CMain {
 
         return $buffer;
     }
+	
+	public static function OnBeforeUserAdd(&$arFields) {
+		
+		if($arFields['EXTERNAL_AUTH_ID'] == 'socservices') {
+			
+			
+			if(!empty($arFields['EMAIL'])) {
+				
+				$arFields['UF_SOC_EMAIL'] = $arFields['EMAIL'];				
+				
+			}
+			
+			$arFields['EMAIL'] = 'temp_' . randString(7) . '_' . time() . '@temp.ru';
+			$arFields['LOGIN'] = $arFields['EMAIL'];
+			$arFields['ACTIVE'] = 'N';
+			$arFields['UF_NEED_CONFIRM'] = 1;
+		}
+		
+	}
+	
+	public static function OnBeforeUserUpdate(&$arFields) {
+		$arFields['LOGIN'] = $arFields['EMAIL'];
+	}
 	
 }
 ?>
