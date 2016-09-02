@@ -2,16 +2,20 @@
 if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 
 //ft\CHelper::clearSession();
+
+$arParams['STEP'] = intval($arParams['STEP']);
+
 $arResult = array();
 
 $arSession = ft\CHelper::getSession();
+
 if(!empty($arSession['SOC_USER_ID'])) {
 	$arResult['CURRENT_USER_ID'] = $arSession['SOC_USER_ID'];
-} elseif($GLOBALS['USER']->getId()) {
+}/* elseif($GLOBALS['USER']->getId()) {
 	// При регистрации через соц. сервисы, пользователь авторизуется.
 	// получаем ID авторизованного пользователя
 	$arResult['CURRENT_USER_ID'] = intval($GLOBALS['USER']->getId());
-}
+}*/
 $arResult['SERVICE_USER'] = array();
 if(!empty($arResult['CURRENT_USER_ID'])) {
 	if($arCurrentUser = \CUser::getList(($by = 'ID'), ($order = 'ASC'), 
@@ -21,7 +25,8 @@ if(!empty($arResult['CURRENT_USER_ID'])) {
 		// разлогиниваем его, сохраняем ID в сессии для дальнейшей "регистрации" пользователя.
 		
 		$arResult['SERVICE_USER'] = $arCurrentUser;
-		if($GLOBALS['USER']->isAuthorized() && $arParams['STEP'] < 2) {
+		if($arSession['REGISTRATION_STEP'] == 2 && $arParams['STEP'] < 2) {
+			ft\CHelper::removeSessionParam('REGISTRATION_STEP');
 			LocalRedirect($GLOBALS['APPLICATION']->getCurPageParam('step=2', array('step')));
 		}
 		$GLOBALS['USER']->Logout();

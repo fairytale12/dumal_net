@@ -17,11 +17,11 @@
 	background: none;
 	color: #ff6600;
 }
-
+/*
 .fancybox-wrap {
 	border: 2px solid #dadada;
 }
-
+*/
 .iframe-body {
 	background-color: #fff;
 	width: 400px;
@@ -30,4 +30,52 @@
 
 .text-right {
 	float: right;
+}
+
+.share-wrapper .share-buttons {
+	top: 0;
+}
+
+.ya-share2 ul.ya-share2__list {
+	margin-bottom: 0px;
+}
+
+.widget-border {
+    padding: 20px;
+    border: 2px solid #dadada;
+}
+
+.program-preview-text-block {
+	height: 58px;
+    overflow: hidden;
+}
+
+.program-price-block {
+	font-weight: bold;
+    color: #222;
+    margin: 0 0 5px 0;
+}
+
+.load-more button.loading {
+	color: #fff;
+	border:2px solid #7a7a7a;
+	background: #7a7a7a;
+}
+
+.load-more button.loading i {
+	background: url('/images/ajax-preloader.gif') 0 0 no-repeat;
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 5px 0 0;
+}
+
+.lessons-list .lesson-block {
+	border: 2px solid #dadada;
+    padding: 20px;
+	margin: 0 0 20px 0;
+	height: 190px;
+	overflow: hidden;
+	text-align: center;
 }

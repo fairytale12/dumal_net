@@ -11,6 +11,10 @@ $eventManager->addEventHandlerCompatible('main', 'OnEndBufferContent', array('ft
 $eventManager->addEventHandlerCompatible('main', 'OnBeforeUserAdd', array('ft\CMainHandlers', 'OnBeforeUserAdd'));
 $eventManager->addEventHandlerCompatible('main', 'OnBeforeUserUpdate', array('ft\CMainHandlers', 'OnBeforeUserUpdate'));
 
+$eventManager->addEventHandlerCompatible('main', 'OnAfterUserAdd', array('ft\CMainHandlers', 'OnAfterUserAdd'));
+$eventManager->addEventHandlerCompatible('main', 'OnUserDelete', array('ft\CMainHandlers', 'OnUserDelete'));
+
+
 class CMainHandlers {
 	
 	public static function endBufferContent(&$buffer) {
@@ -48,6 +52,14 @@ class CMainHandlers {
 	
 	public static function OnBeforeUserUpdate(&$arFields) {
 		$arFields['LOGIN'] = $arFields['EMAIL'];
+	}
+	
+	public static function OnAfterUserAdd(&$arFields) {
+		CUserPrograms::add($arFields['ID']);
+	}
+	
+	public static function OnUserDelete($userId) {
+		CUserPrograms::delete($userId);
 	}
 	
 }

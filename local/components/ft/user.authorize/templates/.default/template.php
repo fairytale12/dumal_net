@@ -47,12 +47,12 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12 social-icons">
 					<div class="form-group">
 						<?foreach($arResult['FIELDS']['SERVICES'] as $arService):?>
-							<div class="soc-icons btn btn-social-icon btn-<?=$arService['ICON']?>" onclick="<?=$arService['ONCLICK']?>">
+							<a class="btn-<?=$arService['ICON']?>" href="javascript:void(0);" onclick="<?=$arService['ONCLICK']?>">
 								<span class="fa fa-lg fa-<?=($arService['ICON'] == 'vkontakte') ? 'vk' : $arService['ICON']?>"></span>
-							</div>
+							</a>
 						<?endforeach;?>
 					</div>
 				</div>

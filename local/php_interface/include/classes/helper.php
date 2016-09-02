@@ -134,7 +134,10 @@ class CHelper {
 	}
 	
 	public static function getFio($arUser) {
-		return trim($arUser['LAST_NAME'] . ' ' . $arUser['NAME'] . ' ' . $arUser['SECOND_NAME']);
+		return trim(
+			(!empty($arUser['LAST_NAME']) ? self::upperFirstSymbol($arUser['LAST_NAME']) : '') . ' ' . 
+			(!empty($arUser['NAME']) ? strtoupper(mb_substr($arUser['NAME'], 0, 1)) . '.' : '') . ' ' . 
+			(!empty($arUser['SECOND_NAME']) ? strtoupper(mb_substr($arUser['SECOND_NAME'], 0, 1)) . '.' : ''));
 	}
 	
 	public static function getUserAge($arUser, $field = 'PERSONAL_BIRTHDAY', $withText = true) {
@@ -175,6 +178,11 @@ class CHelper {
 		return $price . ' руб.';
 	}
 	
+	public static function textCut($text, $length) {
+		$obParser = new \CTextParser;
+		return $obParser->html_cut($text, $length);
+	}
+	
 	public static function returnJsonAnswer($arReturn) {
 		print json_encode($arReturn);
 		die();
@@ -213,6 +221,19 @@ class CHelper {
 		}
 		
 		return round($size) . ' ' . $stepArray[$step];
+	}
+	
+	/**
+	 * Преобразует первый символ в верхний регистр
+	 *
+	 * @param string $str
+	 * @param string $encoding
+	 * @return string
+	 */
+	public static function upperFirstSymbol($str, $encoding = 'UTF-8') {
+		$str = mb_ereg_replace('^[\ ]+', '', $str);
+		$str = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding). mb_substr($str, 1, mb_strlen($str), $encoding);
+		return $str;
 	}
 	
 }

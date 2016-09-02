@@ -21,7 +21,7 @@ class CUserAuthorization {
 						});
 					</script>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<div class="alert alert-danger">
 								<strong>Раздел доступен только авторизованному пользователю</strong>, 
 								<a href="javascript:void(0);" onclick="ftHelper.showLoginForm();">войти</a>.

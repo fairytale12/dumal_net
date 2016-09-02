@@ -141,6 +141,25 @@ class CSocServAuthManager extends \CSocServAuthManager {
 		die();
 	}
 	
+	public static function sendAccount($userId = null) {
+		$userId = intval($userId);
+		
+		if(empty($userId)) {
+			self::sendLogin();
+		}
+		$GLOBALS['USER']->Authorize($userId);
+		$url = '/account/';
+		?>
+		<script type="text/javascript">
+			if(window.opener) {
+				window.opener.location = '<?=\CUtil::JSEscape($url)?>';
+			}
+			window.close();
+		</script>
+		<?
+		die();
+	}
+	
 	public function GetError($service_id, $error_code)
 	{
 		if(isset(self::$arAuthServices[$service_id])) {
@@ -309,6 +328,7 @@ class CSocServAuth extends \CSocServAuth {
 						{
 							$userFields = $socservUserFields;
 							$userFields["EXTERNAL_AUTH_ID"] = "socservices";
+							$userFields["CONFIRM_CODE"] = randString(8);
 
 							if(isset($userFields['PERSONAL_PHOTO']) && is_array($userFields['PERSONAL_PHOTO']))
 							{
@@ -371,8 +391,16 @@ class CSocServAuth extends \CSocServAuth {
 					\CTimeZone::SetCookieValue($socservUserFields["TIME_ZONE_OFFSET"]);
 				}
 
-				$USER->AuthorizeWithOtp($USER_ID);
+				if($socservUser['ACTIVE'] == 'Y') {
+				
+					$USER->AuthorizeWithOtp($USER_ID);
+					
+				} else {
 
+					CHelper::setSession(array('SOC_USER_ID' => $USER_ID, 'REGISTRATION_STEP' => 2));
+					
+				}
+				
 				if($USER->IsJustAuthorized())
 				{
 					ContactTable::onUserLoginSocserv($socservUserFields);

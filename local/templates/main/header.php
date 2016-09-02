@@ -8,7 +8,8 @@
 		
 		<meta name="google-site-verification" content="orTfP-fmP9E8CUpe0vMzVJtOuwuSbnWjaS4ztDRH8YY" />
 		
-		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<!--<script src="https://apis.google.com/js/platform.js"></script>-->
+		<script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
 		
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
 		<?$APPLICATION->ShowHead();?>
@@ -31,9 +32,11 @@
 		*/?>
 		
 		<!-- Google Fonts -->
+		
 		<link href="http://fonts.googleapis.com/css?family=Roboto:100,300,300italic,400,400italic,500,700,700italic,900" rel="stylesheet" type="text/css">
 		<link href="http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic" rel="stylesheet" type="text/css">
 		<link href="http://fonts.googleapis.com/css?family=Raleway:900" rel="stylesheet" type="text/css">
+		
 
 		<!-- Icon Font -->
 		<?Asset::getInstance()->addCss('/plugins/font-awesome/css/font-awesome.min.css');?>

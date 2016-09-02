@@ -49,9 +49,9 @@ class CSocServFacebook extends \CSocServFacebook {
 
 				} elseif($arParams['SEND_REGISTER'] && $arUser['ID']) {
 					if($arUser['ACTIVE'] == 'N') {
-						CSocServAuthManager::sendRegister();
+						CSocServAuthManager::sendRegister(2);
 					} elseif($arUser['ACTIVE'] == 'Y') {
-						CSocServAuthManager::sendLogin();
+						CSocServAuthManager::sendAccount($arUser['ID']);
 					}
 
 				} elseif(is_array($arFBUser) && isset($arFBUser["id"]))
@@ -136,7 +136,7 @@ window.close();
 			$rsUser = \Bitrix\Main\UserTable::getList(array('select' => array('ID', 'ACTIVE'), 'filter' => $arFilter));
 			if($arUser = $rsUser->fetch()) {
 				if($arUser['ACTIVE'] != 'Y') {
-					CSocServAuthManager::sendRegister();
+					CSocServAuthManager::sendRegister(2);
 				} elseif($arUser['ACTIVE'] == 'Y') {
 					$socServAuthObj = new CSocServAuth();
 					return $socServAuthObj->AuthorizeUser($arSocUser);

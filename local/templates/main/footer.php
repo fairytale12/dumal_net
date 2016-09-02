@@ -132,7 +132,7 @@
 							<div class="mag-content">
 								<div class="row">
 									<div class="col-md-6">
-										<p>Copyright Admag © 2015. All Rights Reserved</p>
+										<p>Dumal.net © <?=date('Y')?>. Все права защищены.</p>
 									</div>
 
 									<div class="col-md-6">
@@ -311,6 +311,11 @@
 		<!-- Theme js -->
 		<script src="js/script.js"></script>
 		*/?>
+		
+		
+		<script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+		<script src="//yastatic.net/share2/share.js"></script>
+		
 		<div style="display: none;">
 			<div id="login-user-not-found">
 				<p>Пользователь с таким профилем не найден на сайте. Перейти к регистрации?</p>

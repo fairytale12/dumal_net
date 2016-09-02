@@ -1,13 +1,6 @@
 <?
 $aMenuLinks = Array(
 	Array(
-		"Лента новостей", 
-		"/account/", 
-		Array(), 
-		Array(), 
-		"" 
-	),
-	Array(
 		"Мои программы", 
 		"/account/programs/", 
 		Array(), 

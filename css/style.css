@@ -1981,10 +1981,12 @@ a img.aligncenter {
   width: auto;
   z-index: 100000; /* Above WP toolbar. */
 }
+/*
 .post-header .category{
   top: -30px;
   left: 0px;
 }
+*/
 .post-title{
   margin-top: 0;
   padding-top: 5px;

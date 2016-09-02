@@ -1,0 +1,1 @@
+<div id="ya-share-<?=$arParams['ID']?>" class="ya-share2" data-services="vkontakte,facebook" data-counter=""></div>

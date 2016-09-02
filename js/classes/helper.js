@@ -79,11 +79,27 @@ ftHelper.showIframe = function(href, closeBtn) {
 	
 	$.fancybox(settings);
 	
+	
+	/*
+	$.magnificPopup.open({
+		items: {
+			src: href
+		},
+		type: 'iframe',
+		modal: !closeBtn,
+		preloader: true
+
+		// You may add options here, they're exactly the same as for $.fn.magnificPopup call
+		// Note that some settings that rely on click event (like disableOn or midClick) will not work here
+	}, 0);
+	*/
 	return false;
 }
 
 ftHelper.closeModal = function() {
 	$.fancybox.close();
+	// var magnificPopup = $.magnificPopup.instance;
+	// magnificPopup.close();
 	return false;
 }
 
@@ -105,12 +121,43 @@ ftHelper.showRegistration = function(closeBtn, step) {
 	return ftHelper.showIframe('/iframe/registration.php?step=' + step, closeBtn);
 }
 
-/** @TODO удалить */
-$(function() {
-	$('#pjax-container').append('!');
-})
+ftHelper.ajaxPager = function(_this) {
+	
+	var currentLoadButtonBlock = $(_this).closest('.load-more');
+	var link = $(_this).data('link');
+	
+	$(_this).addClass('loading');
+	
+	$.ajax({
+		url: link,
+		type: 'GET',
+		data: {
+			ftAjaxPager: 'Y'
+		},
+		dataType: 'html',
+		success: function (data) {
+			
+			
+			var content = $(data).filter('#ajax-pager-list');
+			var loadButton = $(data).filter('.load-more');
+			
+			if($('#ajax-pager-list').length && content.length) {
+				$('#ajax-pager-list').append(content.html());
+			}
+			
+			if(loadButton.length) {
+				currentLoadButtonBlock.html(loadButton.html());
+			} else {
+				currentLoadButtonBlock.remove();
+			}
+			
 
-
+		}
+	});
+	
+	return false;
+	
+}
 
 
 
@@ -131,4 +178,11 @@ $('#pjax-container').bind('pjax:start', function(xhr, options) {
 });
 $('#pjax-container').bind('pjax:complete', function(xhr, textStatus, options) {
 	ftHelper.hidePreloader();
+	
+	// update yandex share buttons
+	var shareBlocks = $('div[id^="ya-share-"]');
+	shareBlocks.each(function() {
+		Ya.share2($(this).attr('id'));
+	});
+	
 });

@@ -42,7 +42,7 @@ class CSocServVKontakte extends \CSocServVKontakte {
 					if($arUser['ACTIVE'] == 'N') {
 						CSocServAuthManager::sendRegister(2);
 					} elseif($arUser['ACTIVE'] == 'Y') {
-						CSocServAuthManager::sendLogin();
+						CSocServAuthManager::sendAccount($arUser['ID']);
 					}
 					
 					
@@ -123,7 +123,7 @@ window.close();
             $rsUser = \Bitrix\Main\UserTable::getList(array('select' => array('ID', 'ACTIVE'), 'filter' => $arFilter));
             if($arUser = $rsUser->fetch()) {
                 if($arUser['ACTIVE'] != 'Y') {
-                    CSocServAuthManager::sendRegister();
+                    CSocServAuthManager::sendRegister(2);
                 } elseif($arUser['ACTIVE'] == 'Y') {
                     $socServAuthObj = new CSocServAuth();
                     return $socServAuthObj->AuthorizeUser($arSocUser);
