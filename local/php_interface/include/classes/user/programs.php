@@ -574,19 +574,24 @@ class CUserPrograms {
 		$arProgramIds = array();
 		$arLessons = array();
 		
+		// Получаем все занятия, для которых не отправлены уведомления
 		$modelObj = model\CProgramLessonsModel::getInstance();
 		$arFilter = array(
 			'UF_NOTIFY_COMPLETE' => false
 		);
 		$rsLessons = $modelObj->getList(array('ID', 'UF_PROGRAM'), $arFilter, array('ID' => 'ASC'));
 		while($arLesson = $rsLessons->fetch()) {
-			$arLessons[] = $arLesson;
+			
 			if(empty($arLesson['UF_PROGRAM'])) {
-				$arProgramIds[] = $arLesson['UF_PROGRAM'];
+				continue;
 			}
+			
+			$arLessons[] = $arLesson;
+			$arProgramIds[] = $arLesson['UF_PROGRAM'];
 		}
 		
 		if(!empty($arProgramIds)) {
+			// Если программы есть, то получаем их и пользователей, у которых куплена эта программа
 			$arProgramIds = array_unique($arProgramIds);
 			$rsProgram = \CIBlockElement::getList(
 				array(), 
@@ -604,9 +609,19 @@ class CUserPrograms {
 			);
 			$rsProgram->SetUrlTemplates('/account/programs/#ELEMENT_CODE#/', '', '');
 			while($arProgram = $rsProgram->fetch()) {
-				$arUsers = \ft\CUserPrograms::getProgramUsers($arProgram['ID']);
-				if(!empty($arUsers) && is_array($arUsers)) {
-					foreach($arUsers as $arUser) {
+				$arProgram['USERS'] = \ft\CUserPrograms::getProgramUsers($arProgram['ID']);
+				$arPrograms[$arProgram['ID']] = $arProgram;
+			}
+			
+			foreach($arLessons as $arLesson) {
+				// Отсылаем уведомления по каждому занятию для каждого пользователя
+				$arProgram = $arPrograms[$arLesson['UF_PROGRAM']];
+				if(empty($arProgram)) {
+					continue;
+				}
+			
+				if(!empty($arProgram['USERS']) && is_array($arProgram['USERS'])) {
+					foreach($arProgram['USERS'] as $arUser) {
 					
 						if(empty($arUser['EMAIL'])) {
 							continue;
@@ -621,6 +636,8 @@ class CUserPrograms {
 						\CEvent::send('FT_ADDED_NEW_LESSON', 's1', $arEventFields);
 					}
 				}
+				
+				$modelObj->update($arLesson['ID'], array('UF_NOTIFY_COMPLETE' => 1));
 			}
 		}
 		
