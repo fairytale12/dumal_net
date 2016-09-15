@@ -6,31 +6,30 @@ $GLOBALS['APPLICATION']->setPageProperty('title', $arResult['PROGRAM']['NAME']);
 if(!empty($arResult['AUTHOR'])):
 ?>
 	<?itc\CUncachedArea::startCapture('article-author-block');?>
-	<div class="widget author-widget">
-		<?if(!empty($arResult['AUTHOR']['PERSONAL_PHOTO'])):?>
-			<div class="author-thumb">
-				<img src="<?=ft\CTPic::resizeImage($arResult['AUTHOR']['PERSONAL_PHOTO'], 'crop', 141, 141)?>" alt="<?=$arResult['AUTHOR']['FIO']?>" title="<?=$arResult['AUTHOR']['FIO']?>">
-			</div>
-		<?endif;?>
-		<div class="author-meta">
-			<h3 class="author-title">
-				<?=$arResult['AUTHOR']['FIO']?>
-			</h3>
-			<p class="author-position"><?=$arResult['AUTHOR']['WORK_POSITION']?></p>
-			<p class="author-bio"><?=htmlspecialcharsBack($arResult['AUTHOR']['WORK_PROFILE'])?></p>
-			<div class="author-page-contact">
-				<?if(!empty($arResult['AUTHOR']['UF_VK_LINK'])):?>
-					<a target="_blank" href="<?=$arResult['AUTHOR']['UF_VK_LINK']?>" title="<?=$arResult['AUTHOR']['FIO']?> в ВКонтакте">
-						<i class="fa fa-vk"></i>
-					</a> 
-				<?endif;?>
-				<?if(!empty($arResult['AUTHOR']['UF_FB_LINK'])):?>
-					<a target="_blank" href="<?=$arResult['AUTHOR']['UF_FB_LINK']?>" title="<?=$arResult['AUTHOR']['FIO']?> в Facebook">
-						<i class="fa fa-facebook"></i>
-					</a>
-				<?endif;?>
+	
+	<?if(!empty($arResult['LESSONS'])):?>
+		<?
+		$completedLessonCount = 0;
+		foreach($arResult['LESSONS'] as $arLesson) {
+			if(!$arLesson['IS_COMPLETED']) {
+				continue;
+			}
+			
+			$completedLessonCount++;
+		}
+		
+		$progress = ft\CHelper::getProgress($completedLessonCount, $arResult['PROGRAM']['PROPERTIES']['MAX_LESSONS']['VALUE']);
+		?>
+		<div class="lesson-progress-block"<?=(empty($progress) ? ' style="display: none;"' : '')?>>
+			<h3>Прогресс программы</h3>
+			<div class="progress progress-striped active">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$progress?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$progress?>%;">
+					<span class="sr-only"><?=$progress?>%</span>
+				</div>
 			</div>
 		</div>
-	</div>
+	<?endif;?>
+	
+	<?$GLOBALS['APPLICATION']->includeFile('/include/author.php', $arResult['AUTHOR']);?>
 	<?itc\CUncachedArea::endCapture();?>
 <?endif;?>

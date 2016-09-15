@@ -46,12 +46,12 @@ foreach($arParams["CATEGORY_IBLOCK"] as $iblock_id)
 
 $arDefaultUrlTemplates404 = array(
 	"news" => "",
-	"search" => "search/",
-	"rss" => "rss/",
-	"rss_section" => "#SECTION_ID#/rss/",
+	//"search" => "search/",
+	//"rss" => "rss/",
+	//"rss_section" => "#SECTION_ID#/rss/",
 	"detail" => "#ELEMENT_ID#/",
-	'lesson' => "#ELEMENT_CODE#/[0-9]+/",
-	"section" => "",
+	'lesson' => "#ELEMENT_CODE#/#LESSON_ID#/",
+	//"section" => "",
 );
 
 $arDefaultVariableAliases404 = array();
@@ -63,6 +63,7 @@ $arComponentVariables = array(
 	"SECTION_CODE",
 	"ELEMENT_ID",
 	"ELEMENT_CODE",
+	'LESSON_ID',
 );
 
 if($arParams["USE_SEARCH"] != "Y")
@@ -140,9 +141,10 @@ if($arParams["SEF_MODE"] == "Y")
 			);
 		}
 	}
-
+	
 	CComponentEngine::InitComponentVariables($componentPage, $arComponentVariables, $arVariableAliases, $arVariables);
-
+	
+	
 	$arResult = array(
 		"FOLDER" => $arParams["SEF_FOLDER"],
 		"URL_TEMPLATES" => $arUrlTemplates,

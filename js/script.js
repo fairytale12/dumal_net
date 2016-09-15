@@ -27,7 +27,9 @@ Designed by: DigitalTheme.co
 
 $(function () {
 	"use strict";
-
+	
+	ftHelper.init();
+	
     $(document).ready( function(){
 
     	var $_html = $("html");
@@ -142,7 +144,7 @@ $(function () {
 		// 11. Mobile Menu
 		$("#mobile-nav").mmenu({
          // options
-         searchfield: true,
+         searchfield: false,
          slidingSubmenus: false,
          extensions: ["theme-dark", "effect-slide", "border-full"]
       },{

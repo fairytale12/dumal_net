@@ -5,8 +5,11 @@ $APPLICATION->SetPageProperty("NOT_SHOW_NAV_CHAIN", "Y");
 $APPLICATION->SetTitle("Главная страница");
 ?>
 
+<!--	<iframe width="420" height="315" src="http://www.youtube.com/embed/MzfXQoZb8Ow" frameborder="0" allowfullscreen></iframe> -->
 	
-	
+<?/*
+<iframe width="420" height="315" src="http://www.youtube.com/embed/QRdRYkTZNCI" frameborder="0" allowfullscreen></iframe>
+
 <form action="https://plus.google.com/hangouts/_" method="GET">
 	<input type="hidden" name="gid" value="828386634356"/>
 	<select name="gd">
@@ -18,7 +21,7 @@ $APPLICATION->SetTitle("Главная страница");
 </form>
 	
 	
-	
+*/?>	
 	
 	
 	
@@ -42,7 +45,7 @@ $APPLICATION->SetTitle("Главная страница");
 			'widget_size': 175
 		});
 		*/
-		console.log(typeof(gapi.hangout));
+		//console.log(typeof(gapi.hangout));
 		
 	</script>
 	<!--<iframe width="420" height="315" src="http://www.youtube.com/embed/fCj2UU3dZj8" frameborder="0" allowfullscreen></iframe>-->

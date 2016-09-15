@@ -7,7 +7,11 @@
 	<?
 	$previousLevel = 0;
 	foreach($arResult as $arItem):?>
-
+		
+		<?if($arItem['PARAMS']['IS_MOBILE'] && $arParams['IS_MOBILE'] != 'Y') {
+			continue;
+		}?>
+		
 		<?if ($previousLevel && $arItem["DEPTH_LEVEL"] < $previousLevel):?>
 			<?=str_repeat("</ul></li>", ($previousLevel - $arItem["DEPTH_LEVEL"]));?>
 		<?endif?>

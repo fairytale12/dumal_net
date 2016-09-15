@@ -20,7 +20,7 @@ if(!empty($arResult['ID'])) {
 	
 	$arFilter = array(
 		'ACTIVE' => 'Y',
-		'IBLOCK_ID' => ARTICLES_IBLOCK_ID,
+		'IBLOCK_ID' => PROGRAM_IBLOCK_ID,
 	);
 	
 	$arNav = array(

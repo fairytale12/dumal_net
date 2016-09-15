@@ -7,14 +7,17 @@
 		</h1>
 	</header>
 	
+	<?/*
 	<div class="post-content clearfix">
 		<?=$arResult['PROGRAM']['DETAIL_TEXT']?>
 	</div>
+	*/?>
 	
 	<div class="lessons-list row clearfix">
 		<?foreach($arResult['LESSONS'] as $arLesson):?>
 			<div class="col-md-6">
 				<div class="simple-post lesson-block">
+					<span class="glyphicon <?=($arLesson['IS_COMPLETED'] ? 'glyphicon-check' : 'glyphicon-edit')?>" aria-hidden="true"></span>
 					<h3>
 						<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">
 							<?=$arLesson['UF_NAME']?>

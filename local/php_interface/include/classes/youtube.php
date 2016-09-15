@@ -7,7 +7,7 @@ class CYouTube {
 		$yCode = '';
 		$url = trim($url);
 		$url = parse_url($url);
-		if(preg_match('/youtube/i', $url['host'])) {
+		if(preg_match('/youtube/i', $url['host']) || preg_match('/youtu\.be/i', $url['host'])) {
 			$urlParamsSrc = explode('&', $url['query']);
 			$urlParams = array();
 			foreach($urlParamsSrc as $p) {
@@ -18,7 +18,9 @@ class CYouTube {
 			$yCode = false;
 			if(!empty($urlParams['v'])) {
 				$yCode = $urlParams['v'];
-			};
+			} elseif(!empty($url['path'])) {
+				$yCode = str_replace('/', '', $url['path']);
+			}
 			
 			return $yCode;
 		}

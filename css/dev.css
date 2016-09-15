@@ -24,7 +24,7 @@
 */
 .iframe-body {
 	background-color: #fff;
-	width: 400px;
+	width: 300px;
 	padding: 15px;
 }
 
@@ -34,6 +34,24 @@
 
 .share-wrapper .share-buttons {
 	top: 0;
+}
+
+.share-buttons a {
+	margin: 0;
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #dadada;
+	background: #fff;
+	color: #222;
+	/* ff6600 */
+}
+
+.share-buttons a:hover {
+	color: #ff6600;
+	border-color: #ff6600
 }
 
 .ya-share2 ul.ya-share2__list {
@@ -50,10 +68,26 @@
     overflow: hidden;
 }
 
+.post-wrapper .post-meta {
+	position: relative;
+}
+
+.program-buy-block {
+	position: absolute;
+	top: 15px;
+    right: 15px;
+	z-index: 100;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
 .program-price-block {
 	font-weight: bold;
     color: #222;
-    margin: 0 0 5px 0;
+    margin: 0 10px 5px 0;
+	
 }
 
 .load-more button.loading {
@@ -78,4 +112,90 @@
 	height: 190px;
 	overflow: hidden;
 	text-align: center;
+	position: relative;
+}
+
+.lessons-list .lesson-block .glyphicon {
+	font-size: 20px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.lesson-tasks .panel .panel-heading {
+	position: relative;
+}
+
+.lesson-tasks .panel .panel-heading .task-icon {
+	position: absolute; 
+	right: 10px; 
+	top: 15px;
+}
+
+.lesson-tasks .panel .panel-heading .collapsed .task-icon {
+	color: fff;
+}
+
+.success-text {
+	color: #8cc152;
+}
+
+#notifies-block {
+	position: fixed;
+	right: 10px;
+	bottom: 0px;
+	width: 300px;
+	z-index: 101;
+}
+
+#vk_comments {
+	margin: 0 0 50px 0;
+}
+
+.progress {
+	height: 20px;
+}
+
+.progress .sr-only {
+	position: static;
+}
+
+.mm-menu .mm-offcanvas {
+    display: none;
+    position: fixed;
+}
+
+.header-right .header-phone-block {
+	margin: 15px 15px 0 0;
+    float: left;
+	font-weight: bold;
+}
+
+.header-right .social-icons {
+	float: right;
+}
+
+
+@media (max-width: 1199px) {
+	.header-right {
+		right: 10px;
+	}
+}
+
+@media (max-width: 991px) {
+	.header-right .social-icons {
+		display: none;
+	}
+}	
+
+@media (max-width: 400px) {
+
+	.header-right .header-phone-block {
+		font-size: 13px;
+		margin: 17px 0 0 0;
+	}
+	
+	.header-right {
+		right: 0px;
+	}
 }

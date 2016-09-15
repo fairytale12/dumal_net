@@ -1,5 +1,6 @@
 var ftHelper = function() {};
 
+ftHelper.isAjaxBusy = false;
 
 ftHelper.showPreloader = function() {
 	if(!$('#site-preloader').length) {
@@ -17,6 +18,28 @@ ftHelper.hidePreloader = function() {
 	
 	$('#site-preloader').hide();
 	return true;
+}
+
+ftHelper.destroy = function() {
+	
+	// iCheck
+	$('input[type="checkbox"]').iCheck('destroy');
+}
+
+ftHelper.init = function() {
+	
+	// iCheck
+	$('input[type="checkbox"]').iCheck({
+		checkboxClass: 'icheckbox_minimal',
+		radioClass: 'iradio_minimal',
+		increaseArea: '20%' // optional
+	});
+	
+	$('.done-task-block input[type="checkbox"]').on('ifChecked', function(event){
+		// Задание выполнено
+		ftUserLesson.lessonComplete(this);
+	});
+	
 }
 
 ftHelper.showModal = function(id, closeBtn) {
@@ -57,7 +80,7 @@ ftHelper.showIframe = function(href, closeBtn) {
 		closeBtn: closeBtn,
 		href: href,
 		type: 'iframe',
-		width: 400,
+		width: 300,
 		padding: 0,
 		scrolling: 'auto',
 		iframe: {
@@ -123,6 +146,12 @@ ftHelper.showRegistration = function(closeBtn, step) {
 
 ftHelper.ajaxPager = function(_this) {
 	
+	if(ftHelper.isAjaxBusy) {
+		return false;
+	}
+	
+	ftHelper.isAjaxBusy = true;
+	
 	var currentLoadButtonBlock = $(_this).closest('.load-more');
 	var link = $(_this).data('link');
 	
@@ -152,13 +181,62 @@ ftHelper.ajaxPager = function(_this) {
 			}
 			
 
+		},
+		complete: function(xhr, textStatus) {
+			
+			ftHelper.isAjaxBusy = false;
+			if(xhr.status == 200) {
+				
+			}
+			
 		}
+		
 	});
 	
 	return false;
 	
 }
 
+ftHelper.addNotify = function(text, type, duration) {
+	
+	
+	if(type == undefined) {
+		type = 'warning';
+	}
+	
+	if(duration == undefined) {
+		duration = 4000;
+	}
+	
+	if($('#notifies-block').length) {
+		
+		/*
+		types:
+			alert-warning
+			alert-danger
+			alert-success
+		*/
+		
+		var block = '<div class="alert alert-' + type + '">' +
+					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + text + '</div>';
+
+		$('#notifies-block').prepend(block);
+		
+		var thisBlock = $('#notifies-block .alert:first');
+		
+		setTimeout(
+			function() {
+				thisBlock.fadeOut(
+					500, 
+					function() {
+						$(this).remove();
+					}
+				);
+			}, 
+			duration
+		);
+	}
+}
 
 
 $(document).pjax('a[data-pjax]', '#pjax-container', {
@@ -172,17 +250,36 @@ $(document).bind('pjax:click', function(options) {
 	if($(options.target).closest('.mega-menu')) {
 		$(options.target).parents('li').addClass('active');
 	}
+	//console.log($(options.target));
+	
+	if($(options.target).closest('#mobile-nav')) {
+		$('#mobile-nav').data('mmenu').close();
+	}
 });
 $('#pjax-container').bind('pjax:start', function(xhr, options) {
 	ftHelper.showPreloader();
+	
+	$('html, body').animate({scrollTop : 0}, 500, 'linear');
 });
+
+$('#pjax-container').bind('pjax:beforeReplace', function(contents, options) {
+	console.log('ftHelper.destroy');
+	ftHelper.destroy();
+});
+
+
 $('#pjax-container').bind('pjax:complete', function(xhr, textStatus, options) {
 	ftHelper.hidePreloader();
 	
+	console.log('ftHelper.init');
+	ftHelper.init();
+	
 	// update yandex share buttons
+	/*
 	var shareBlocks = $('div[id^="ya-share-"]');
 	shareBlocks.each(function() {
 		Ya.share2($(this).attr('id'));
 	});
+	*/
 	
 });

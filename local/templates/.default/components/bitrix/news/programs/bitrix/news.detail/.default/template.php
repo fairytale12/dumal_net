@@ -45,11 +45,26 @@ $this->setFrameMode(true);
 	</div>
 
 	<footer class="post-meta">
+	
+		<div class="program-buy-block">	
+			<div class="program-price-block inline-block">
+				<?=ft\CHelper::showPrice($arResult['PROPERTIES']['PRICE']['VALUE'])?>
+			</div>
+
+			<div class="inline-block">
+				<button type="button" class="btn btn-success">Принять участие</button>
+			</div>
+		</div>
 
 		<div class="share-wrapper clearfix">
 
 			<div class="share-buttons">
-				<?$GLOBALS['APPLICATION']->IncludeFile('/include/share_buttons.php', array('ID' => $arResult['ID']))?>
+				<?$GLOBALS['APPLICATION']->IncludeFile('/include/share_buttons.php', array(
+					'URL' => $GLOBALS['APPLICATION']->getCurPage(false),
+					'TITLE' => $arResult['NAME'],
+					'IMG_PATH' => ft\CTPic::resizeImage($arResult['DETAIL_PICTURE']['ID'], 'crop', 730, 480),
+					'DESC' => $arResult['PREVIEW_TEXT'],
+				));?>
 			</div>
 		</div>                              
 		<?if(!empty($arResult['NEIGHBORS'])):?>

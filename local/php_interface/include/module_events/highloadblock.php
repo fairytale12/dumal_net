@@ -1,8 +1,9 @@
 <?
-namespace sebekon\handlers;
+namespace ft\handlers;
 
 use Bitrix\Main;
 use Bitrix\Main\Entity;
+use Bitrix\Main\Loader;
 
 $eventManager = Main\EventManager::getInstance();
 
@@ -11,12 +12,14 @@ $arHLBlocks = array(
 );
 
 foreach($arHLBlocks as $hlBlock) {
-	//$eventManager->addEventHandler('', $hlBlock . 'OnBeforeAdd', array('\sebekon\handlers\CHLBlock', 'prepareName'));
-	$eventManager->addEventHandler('', $hlBlock . 'OnAfterAdd', array('\sebekon\handlers\CHLBlock', 'addXmlId'));
-	$eventManager->addEventHandler('', $hlBlock . 'OnBeforeUpdate', array('\sebekon\handlers\CHLBlock', 'checkXmlId'));
-	$eventManager->addEventHandler('', $hlBlock . 'OnBeforeAdd', array('\sebekon\handlers\CHLBlock', 'setLessonNumber'));
-	//$eventManager->addEventHandler('', $hlBlock . 'OnAfterUpdate', array('\sebekon\handlers\CHLBlock', 'updateCache'));
+	//$eventManager->addEventHandler('', $hlBlock . 'OnBeforeAdd', array('\ft\handlers\CHLBlock', 'prepareName'));
+	$eventManager->addEventHandler('', $hlBlock . 'OnAfterAdd', array('\ft\handlers\CHLBlock', 'addXmlId'));
+	$eventManager->addEventHandler('', $hlBlock . 'OnBeforeUpdate', array('\ft\handlers\CHLBlock', 'checkXmlId'));
+	$eventManager->addEventHandler('', $hlBlock . 'OnBeforeAdd', array('\ft\handlers\CHLBlock', 'setLessonNumber'));
+	//$eventManager->addEventHandler('', $hlBlock . 'OnAfterUpdate', array('\ft\handlers\CHLBlock', 'updateCache'));
 }
+
+//$eventManager->addEventHandler('', 'ProgramLessonsOnAfterAdd', array('\ft\handlers\CHLBlock', 'newLessonSendInfo'));
 
 class CHLBlock {
 
@@ -110,6 +113,37 @@ class CHLBlock {
 		}
 	}
 	
+	/** @TODO возможно стоит переделать на агент */
+	/*
+	public static function newLessonSendInfo(Entity\Event $event) {
+		$fields = $event->getParameter('fields');
+		$arUsers = \ft\CUserPrograms::getProgramUsers($fields['UF_PROGRAM']);
+		
+		if(!empty($arUsers)) {
+			Loader::includeModule('iblock');
+			$rsProgram = \CIBlockElement::getList(array(), array('IBLOCK_ID' => PROGRAM_IBLOCK_ID, 'ID' => $fields['UF_PROGRAM']), false, false, array('ID', 'NAME', 'DETAIL_PAGE_URL'));
+			$rsProgram->SetUrlTemplates('/account/programs/#ELEMENT_CODE#/', '', '');
+			if($arProgram = $rsProgram->getNext()) {
+				foreach($arUsers as $arUser) {
+					
+					if(empty($arUser['EMAIL'])) {
+						continue;
+					}
+					
+					$arEventFields = array(
+						'PROGRAM_NAME' => $arProgram['NAME'],
+						'PROGRAM_LINK' => $arProgram['DETAIL_PAGE_URL'],
+						'EMAIL' => $arUser['EMAIL']
+					);
+					
+					\CEvent::send('FT_ADDED_NEW_LESSON', 's1', $arEventFields);
+				}
+			}
+
+		}
+		
+	}
+	*/
 }
 
 

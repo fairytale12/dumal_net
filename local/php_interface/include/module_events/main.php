@@ -55,11 +55,11 @@ class CMainHandlers {
 	}
 	
 	public static function OnAfterUserAdd(&$arFields) {
-		CUserPrograms::add($arFields['ID']);
+		//CUserPrograms::add($arFields['ID']);
 	}
 	
 	public static function OnUserDelete($userId) {
-		CUserPrograms::delete($userId);
+		CUserPrograms::deleteAll($userId);
 	}
 	
 }

@@ -1,6 +1,19 @@
 <div class="col-md-4" data-stickycolumn>
 	<aside class="sidebar clearfix">
-	
+
+		<?/*
+		<div class="widget searchwidget">
+			<form class="searchwidget-form">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search...">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+					</span>
+				</div>
+			</form>
+		</div>
+		*/?>
+		
 		<?itc\CUncachedArea::show('article-author-block')?>
 		
 		<div class="widget widget-border subscribewidget">

@@ -236,6 +236,49 @@ class CHelper {
 		return $str;
 	}
 	
+	public static function showError($text) {
+		?>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-danger">
+					<?=$text?>
+				</div>
+			</div>
+		</div>
+		<?
+	}
+	
+	public static function getProgress($currentValue, $maxVaue) {
+		$progress = ceil($currentValue / $maxVaue * 100);
+		if($progress > 100) {
+			$progress = 100;
+		}
+		
+		return $progress;
+	}
+	
+	public static function getHostname($siteID = false) {
+        $serverName = '';
+        if ($siteID && 0 < strlen($siteID) && $arSite = \CSite::GetArrayByID($siteID)) {
+            $serverName = $arSite['SERVER_NAME'];
+        }
+        if (0 >= strlen(trim($serverName))) {
+            if (array_key_exists('HTTP_HOST', $_SERVER) && 0 < strlen(trim($_SERVER['HTTP_HOST']))) {
+                $serverName = $_SERVER['HTTP_HOST'];
+            //} elseif ('development' == getenv('APPLICATION_ENV')) {
+            //    $serverName = 'dev.rentride.ru';
+            } elseif (defined("SITE_SERVER_NAME") && 0 < strlen(trim(SITE_SERVER_NAME))) {
+                $serverName = SITE_SERVER_NAME;
+            } else {
+                $serverName = \COption::GetOptionString('main', 'server_name');
+            }
+        }
+        return trim($serverName);
+    }
+	
+	public static function getDomain($siteID = false) {
+		return 'http://' . self::getHostname($siteID);
+	}
 }
 
 ?>

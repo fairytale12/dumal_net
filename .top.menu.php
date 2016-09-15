@@ -1,7 +1,7 @@
 <?
 $aMenuLinks = Array(
 	Array(
-		"Магазин программ", 
+		"Программы", 
 		"/programs/", 
 		Array(), 
 		Array(), 
@@ -36,6 +36,17 @@ $aMenuLinks = Array(
 			'CLASS' => 'user-menu-account'
 		), 
 		'$GLOBALS[\'USER\']->isAuthorized()'
+	),
+	Array(
+		"Войти", 
+		"javascript:void(0);", 
+		Array(), 
+		Array(
+			'ONCLICK' => '$(\'#mobile-nav\').data(\'mmenu\').close(); return ftHelper.showLoginForm();',
+			'IS_MOBILE' => true,
+			'NOT_PJAX' => true
+		), 
+		'!$GLOBALS[\'USER\']->isAuthorized()'
 	),
 );
 ?>

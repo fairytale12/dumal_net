@@ -16,7 +16,7 @@ if($arParams['IS_AJAX']) {
 	$GLOBALS['APPLICATION']->restartBuffer();
 }
 ?>
-<h1 class="block-title"><span>Магазин програм</span></h1>
+<h1 class="block-title"><span>Программы</span></h1>
 <div id="ajax-pager-list">
 	<?foreach($arResult["ITEMS"] as $arItem):?>
 		<?
@@ -43,16 +43,10 @@ if($arParams['IS_AJAX']) {
 					</a>
 				</h3>
 				<div class="row">
-					<div class="col-md-10">
+					<div class="col-md-12">
 						<p class="program-preview-text-block">
-						<?=ft\CHelper::textCut($arItem['PREVIEW_TEXT'], 200)?>
+						<?=ft\CHelper::textCut($arItem['PREVIEW_TEXT'], 230)?>
 						</p>
-					</div>
-					<div class="col-md-2">
-						<div class="program-price-block">
-							<?=ft\CHelper::showPrice($arItem['PROPERTIES']['PRICE']['VALUE'])?>
-						</div>
-						<button type="button" class="btn btn-success">Купить</button>
 					</div>
 				</div>
 				<p class="simple-share">

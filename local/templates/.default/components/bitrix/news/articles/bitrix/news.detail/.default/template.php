@@ -44,7 +44,12 @@ $this->setFrameMode(true);
 		<div class="share-wrapper clearfix">
 
 			<div class="share-buttons">
-				<?$GLOBALS['APPLICATION']->IncludeFile('/include/share_buttons.php', array('ID' => $arResult['ID']))?>
+				<?$GLOBALS['APPLICATION']->IncludeFile('/include/share_buttons.php', array(
+					'URL' => $GLOBALS['APPLICATION']->getCurPage(false),
+					'TITLE' => $arResult['NAME'],
+					'IMG_PATH' => ft\CTPic::resizeImage($arResult['DETAIL_PICTURE']['ID'], 'crop', 730, 425),
+					'DESC' => $arResult['PREVIEW_TEXT'],
+				));?>
 			</div>
 		</div>                              
 		<?if(!empty($arResult['NEIGHBORS'])):?>

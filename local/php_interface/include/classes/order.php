@@ -3,6 +3,9 @@ namespace ft;
 
 class COrder {
 	
+	/**
+	 * Получает заказ
+	 */
 	public static function get($orderId, $userId = null) {
 		$orderId = intval($orderId);
 		
@@ -83,7 +86,7 @@ class COrder {
 			return false;
 		}
 		
-		return CUserPrograms::addProgram($userId, $arOrder['UF_ITEM']);
+		return CUserPrograms::add($userId, $arOrder['UF_ITEM']);
 	}
 	
 }

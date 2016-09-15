@@ -16,6 +16,11 @@ if ($this->StartResultCache(false, false)) {
 	
 	$arResult = ft\CUserPrograms::getProgramLessons($arParams['PROGRAM_CODE'], $arParams['USER_ID']);
 	
+	if($arResult['CODE'] <= 0) {
+		$this->abortResultCache();
+		ft\CHelper::showError($arResult['TEXT']);
+		return false;
+	}
 
 	$arResult['AUTHOR'] = false;
 	if(!empty($arResult['PROGRAM']['PROPERTIES']['AUTHOR_ID']['VALUE'])) {

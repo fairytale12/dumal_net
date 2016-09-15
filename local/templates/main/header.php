@@ -9,7 +9,7 @@
 		<meta name="google-site-verification" content="orTfP-fmP9E8CUpe0vMzVJtOuwuSbnWjaS4ztDRH8YY" />
 		
 		<!--<script src="https://apis.google.com/js/platform.js"></script>-->
-		<script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
+		<?/*<script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>*/?>
 		
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
 		<?$APPLICATION->ShowHead();?>
@@ -47,6 +47,7 @@
 		<!-- Theme CSS -->
 		<?Asset::getInstance()->addCss('/css/style.css');?>
 		<?Asset::getInstance()->addCss('/css/fancybox/jquery.fancybox.css');?>
+		<?Asset::getInstance()->addCss('/css/icheck/minimal/minimal.css');?>
 		<?Asset::getInstance()->addCss('/css/dev.css');?>
 		
 		<?Asset::getInstance()->addJs('/js/jquery-1.11.2.min.js');?>
@@ -54,10 +55,19 @@
 		<?Asset::getInstance()->addJs('/plugins/bootstrap/js/bootstrap.js');?>
 		<?Asset::getInstance()->addJs('/js/jquery.pjax.js');?>
 		<?Asset::getInstance()->addJs('/js/jquery.fancybox.pack.js');?>
+		<?Asset::getInstance()->addJs('/js/icheck.min.js');?>
 		<?Asset::getInstance()->addJs('/js/plugins.js');?>
 		<?Asset::getInstance()->addJs('/js/script.js');?>
 		
 		<?Asset::getInstance()->addJs('/js/classes/helper.js');?>
+		<?Asset::getInstance()->addJs('/js/classes/share.js');?>
+		<?Asset::getInstance()->addJs('/js/classes/user_lesson.js');?>
+		
+		<script type="text/javascript" src="//vk.com/js/api/openapi.js?128"></script>
+		
+		<script type="text/javascript">
+			VK.init({apiId: <?=VK_APPLICATION_ID?>, onlyWidgets: true});
+		</script>
 		
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -107,6 +117,20 @@
 										);?>
 										
 										<div class="header-right">
+											<div class="header-phone-block">
+												<span class="glyphicon glyphicon-phone"></span>
+												<?$APPLICATION->IncludeComponent(
+													"bitrix:main.include",
+													"",
+													Array(
+														"AREA_FILE_RECURSIVE" => "Y",
+														"AREA_FILE_SHOW" => "file",
+														"AREA_FILE_SUFFIX" => "sidebar",
+														"EDIT_TEMPLATE" => "",
+														"PATH" => "/include/header_phone.php"
+													)
+												);?>
+											</div>
 											<div class="social-icons">
 												
 												<?if(!$GLOBALS['USER']->isAuthorized()):?>
@@ -115,12 +139,15 @@
 													<a href="javascript:void(0);" onclick="return ftHelper.showRegistration();">Регистрация</a>
 													
 												<?endif;?>
+												<?/*
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="ВКонтакте"><i class="fa fa-vk fa-lg"></i></a>
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook fa-lg"></i></a>
 												<!--
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter fa-lg"></i></a>
 												<a href="#" data-toggle="tooltip" data-placement="bottom" title="Google+"><i class="fa fa-google-plus fa-lg"></i></a>
 												-->
+												*/?>
+												
 												<!-- Only for Fixed Sidebar Layout -->
 												<a href="#" class="fixed-button navbar-toggle" id="fixed-button">
 													<i></i>
@@ -129,17 +156,19 @@
 													<i></i>
 												</a><!-- .fixed-button -->
 											</div><!-- .social-icons -->
+											
 										</div><!-- .header-right -->
 
 									</nav><!-- .navbar -->
-
+									<?/*
 									<div id="sb-search" class="sb-search">
 										<form>
 											<input class="sb-search-input" placeholder="Enter your search text..." type="text" value="" name="search" id="search">
 											<input class="sb-search-submit" type="submit" value="">
 											<span class="sb-icon-search fa fa-search" data-toggle="tooltip" data-placement="bottom" title="Search"></span>
 										</form>
-									</div><!-- .sb-search -->           
+									</div><!-- .sb-search -->
+									*/?>
 								</div>
 							</div>
 						</div><!-- .mag-content -->
