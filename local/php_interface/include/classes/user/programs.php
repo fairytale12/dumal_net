@@ -608,7 +608,7 @@ class CUserPrograms {
 				)
 			);
 			$rsProgram->SetUrlTemplates('/account/programs/#ELEMENT_CODE#/', '', '');
-			while($arProgram = $rsProgram->fetch()) {
+			while($arProgram = $rsProgram->getNext()) {
 				$arProgram['USERS'] = \ft\CUserPrograms::getProgramUsers($arProgram['ID']);
 				$arPrograms[$arProgram['ID']] = $arProgram;
 			}
