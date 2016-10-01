@@ -16,19 +16,11 @@
 		
 		<?itc\CUncachedArea::show('article-author-block')?>
 		
-		<div class="widget widget-border subscribewidget">
-			<h3 class="block-title"><span>Subscribe</span></h3>
-			<p>The more you tighten your grip, Tarkin, the more star systems will slip through your fingers.</p>
-			<form class="form-inline">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Enter your email">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button">Subscribe</button>
-					</span>
-				</div>
-			</form>
-		</div>
+		<?itc\CUncachedArea::show('categories-block')?>
 		
+		<?itc\CUncachedArea::show('subscribe-form-block')?>
+		
+		<?/*
 		<div class="widget categorywidget">
 			<h3 class="block-title"><span>Categories</span></h3>
 			<ul>
@@ -46,6 +38,7 @@
 				</li>
 			</ul>
 		</div>
+		*/?>
 		
 	</aside>
 </div>

@@ -84,10 +84,11 @@ $APPLICATION->SetTitle("Видео");
 		"USE_SEARCH" => "N",
 		"USE_SHARE" => "N",
 		"COMPONENT_TEMPLATE" => "video",
+		"IS_AJAX" => ($_POST["ftAjaxPager"]=="Y"),
 		"SEF_URL_TEMPLATES" => array(
 			"news" => "",
-			"section" => "",
-			"detail" => "#ELEMENT_CODE#/",
+			"section" => "#SECTION_CODE#/",
+			"detail" => "detail/#ELEMENT_CODE#/",
 		)
 	),
 	false

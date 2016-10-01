@@ -61,6 +61,7 @@
 		
 		<?Asset::getInstance()->addJs('/js/classes/helper.js');?>
 		<?Asset::getInstance()->addJs('/js/classes/share.js');?>
+		<?Asset::getInstance()->addJs('/js/classes/subscribe.js');?>
 		<?Asset::getInstance()->addJs('/js/classes/user_lesson.js');?>
 		
 		<script type="text/javascript" src="//vk.com/js/api/openapi.js?128"></script>

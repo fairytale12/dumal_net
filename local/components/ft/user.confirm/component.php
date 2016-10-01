@@ -83,6 +83,10 @@ else
 			{
 				$obUser = new CUser;
 				$obUser->Update($arResult["USER"]["ID"], array("ACTIVE" => "Y", "CONFIRM_CODE" => ""));
+				
+				// Подписка
+				ft\CSubscribe::confirm($arResult["USER"]["ID"], '', array(), false);
+				
 				$rsUser = CUser::GetByID($arResult["USER"]["ID"]);
 				$arResult["USER_ACTIVE"] = $rsUser->GetNext();
 				if($arResult["USER_ACTIVE"] && $arResult["USER_ACTIVE"]["ACTIVE"] === "Y")

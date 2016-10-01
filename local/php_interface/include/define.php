@@ -8,5 +8,8 @@ define('GOOGLE_HANGOUT_KEY', 'AIzaSyBSawJMWiSnLkEnkHr6TxuKk26NOcIpwys');
 define('PROGRAM_IBLOCK_ID', 1);
 define('ARTICLES_IBLOCK_ID', 2);
 define('VIDEO_IBLOCK_ID', 3);
-define('USER_PROGRAMS_IBLOCK_ID', 4);
+
+// Рубрики
+define('ARTICLES_AND_VIDEO_RUBRIC_ID', 1);
+define('PROGRAMS_RUBRIC_ID', 2);
 ?>

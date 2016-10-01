@@ -87,9 +87,10 @@ $APPLICATION->SetTitle("Магазин программ");
 		"COMPONENT_TEMPLATE" => "programs",
 		"SEF_URL_TEMPLATES" => array(
 			"news" => "",
-			"section" => "",
-			"detail" => "#ELEMENT_CODE#/",
-		)
+			"section" => "#SECTION_CODE#/",
+			"detail" => "detail/#ELEMENT_CODE#/",
+		),
+		"IS_AJAX" => ($_POST["ftAjaxPager"]=="Y"),
 	),
 	false
 );?>

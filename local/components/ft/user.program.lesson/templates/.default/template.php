@@ -6,9 +6,27 @@
 			<?=$arResult['LESSON']['UF_NAME']?>
 		</h1>
 	</header>
-	
 	<?if(!empty($arResult['LESSON']['UF_VIDEO'])):?>
 		<?=ft\CYouTube::insertHTMLVideo($arResult['LESSON']['UF_VIDEO'], 730, 425)?>
+	<?endif;?>
+	<?if(!empty($arResult['LESSON']['UF_PLAN'])):?>
+		<div class="panel-group lesson-tasks" id="accordion-plan-<?=$arResult['LESSON']['ID']?>">
+			<div class="panel">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion-plan-<?=$arResult['LESSON']['ID']?>" href="#lesson-plan-info" aria-expanded="false" class="collapsed">
+							План занятия
+							<span class="task-icon glyphicon glyphicon-exclamation-sign"></span>
+						</a>
+					</h4>
+				</div>
+				<div id="lesson-plan-info" class="panel-collapse collapse" aria-expanded="false">
+					<div class="panel-body">
+						<p><?=TxtToHTML($arResult['LESSON']['UF_PLAN'])?></p>
+					</div>
+				</div>
+			</div>
+		</div>
 	<?endif;?>
 	<?if(!empty($arResult['TASKS'])):?>
 		<h4>Задания</h4>

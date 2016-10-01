@@ -227,7 +227,7 @@ class CUserPrograms {
 		$arLessonIds = array();
 		
 		$modelObj = model\CProgramLessonsModel::getInstance();
-		$rsLessons = $modelObj->getList(array('*'), $arFilter, array('UF_DATE_UPDATE' => 'DESC'));
+		$rsLessons = $modelObj->getList(array('*'), $arFilter, array('UF_DATE_UPDATE' => 'DESC', 'UF_NUMBER' => 'DESC'));
 		while($arLesson = $rsLessons->fetch()) {
 			$arLesson['LINK'] = self::getLessonLink($programCode, $arLesson['ID']);
 			$arLesson['IS_COMPLETED'] = false;
@@ -354,23 +354,29 @@ class CUserPrograms {
 			return CHelper::returnAnswer(-5, 'Урок не найден');
 		}
 		
-		$arUserTasks = self::getCompletedTaskIds($arProgram['ID'], $arLesson['ID'], $userId);
 		$arTasks = array();
-		$arFilter = array(
-			'=UF_PROGRAM' => $arProgram['ID'],
-			'=UF_LESSON' => $lessonId,
-		);
 		
-		$modelObj = model\CLessonTasksModel::getInstance();
-		$rsTask = $modelObj->getList(array('*'), $arFilter, array('UF_SORT' => 'ASC'));
-		while($arTask = $rsTask->fetch()) {
+		if($arLesson['UF_SHOW_TASKS']) {
+		
+			$arUserTasks = self::getCompletedTaskIds($arProgram['ID'], $arLesson['ID'], $userId);
 			
-			$arTask['IS_COMPLETED'] = false;
-			if(in_array($arTask['ID'], $arUserTasks)) {
-				$arTask['IS_COMPLETED'] = true;
+			$arFilter = array(
+				'=UF_PROGRAM' => $arProgram['ID'],
+				'=UF_LESSON' => $lessonId,
+			);
+			
+			$modelObj = model\CLessonTasksModel::getInstance();
+			$rsTask = $modelObj->getList(array('*'), $arFilter, array('UF_SORT' => 'ASC'));
+			while($arTask = $rsTask->fetch()) {
+				
+				$arTask['IS_COMPLETED'] = false;
+				if(in_array($arTask['ID'], $arUserTasks)) {
+					$arTask['IS_COMPLETED'] = true;
+				}
+				
+				$arTasks[] = $arTask;
 			}
 			
-			$arTasks[] = $arTask;
 		}
 		
 		return CHelper::returnAnswer(1, 'Урок найден', array(

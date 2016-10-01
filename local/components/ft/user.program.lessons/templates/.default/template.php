@@ -15,16 +15,20 @@
 	
 	<div class="lessons-list row clearfix">
 		<?foreach($arResult['LESSONS'] as $arLesson):?>
-			<div class="col-md-6">
-				<div class="simple-post lesson-block">
-					<span class="glyphicon <?=($arLesson['IS_COMPLETED'] ? 'glyphicon-check' : 'glyphicon-edit')?>" aria-hidden="true"></span>
-					<h3>
-						<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">
+			<div class="col-md-12">
+				<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">
+					<div class="simple-post lesson-block">
+						<span class="glyphicon <?=($arLesson['IS_COMPLETED'] ? 'glyphicon-check' : 'glyphicon-edit')?>" aria-hidden="true"></span>
+						<h3>
 							<?=$arLesson['UF_NAME']?>
-						</a>
-					</h3>
-					<p><i><?=$arLesson['UF_INFO']?></i></p>
-				</div>
+						</h3>
+						<p><i><?=$arLesson['UF_INFO']?></i></p>
+						<?if(!empty($arLesson['UF_PICTURE'])):?>
+							<div class="lesson-background" style="background: url(<?=\CFile::getPath($arLesson['UF_PICTURE'])?>) 50% 50% no-repeat;"></div>
+						<?endif;?>
+						<!--<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">-->
+					</div>
+				</a>
 			</div>
 		<?endforeach;?>
 	</div>

@@ -28,6 +28,7 @@ require_once(Application::getDocumentRoot() . '/local/php_interface/include/clas
 // классы сайта
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/pjax.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/youtube.php');
+//require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/vkontakte.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/order.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/socialservices/authmanager.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/socialservices/facebook.php');
@@ -37,6 +38,7 @@ require_once(Application::getDocumentRoot() . '/local/php_interface/include/clas
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/user/registration.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/user/validation.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/user/authorization.php');
+require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/user/subscribe.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/user/programs.php');
 
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/classes/helper.php');
@@ -62,5 +64,7 @@ require_once(Application::getDocumentRoot() . '/local/php_interface/include/prop
 
 // события
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/module_events/main.php');
+require_once(Application::getDocumentRoot() . '/local/php_interface/include/module_events/iblock.php');
+require_once(Application::getDocumentRoot() . '/local/php_interface/include/module_events/subscribe.php');
 require_once(Application::getDocumentRoot() . '/local/php_interface/include/module_events/highloadblock.php');
 ?>

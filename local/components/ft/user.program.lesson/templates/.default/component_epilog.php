@@ -33,7 +33,7 @@ if(!empty($arResult['AUTHOR'])):
 	
 	<div id="vk_comments"></div>
 	<script type="text/javascript">
-		VK.Widgets.Comments('vk_comments', {limit: 10, attach: false}, 'user-lesson-<?=$arResult['PROGRAM']['ID']?>-<?=$arResult['LESSON']['ID']?>');
+		VK.Widgets.Comments('vk_comments', {limit: 10, attach: false, autoPublish: 0}, 'user-lesson-<?=$arResult['PROGRAM']['ID']?>-<?=$arResult['LESSON']['ID']?>');
 	</script>
 	
 	<?itc\CUncachedArea::endCapture();?>
