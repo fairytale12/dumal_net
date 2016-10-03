@@ -22,3 +22,9 @@ if(!empty($arResult['AUTHOR'])):
 		)
 	);?>
 <?itc\CUncachedArea::endCapture();?>
+
+<?if(!empty($arResult['ID'])):?>
+	<?itc\CUncachedArea::startCapture('form-to-insert');?>
+		<?$GLOBALS['APPLICATION']->includeFile('/include/program_form_template.php', array('ID' => $arResult['ID']));?>
+	<?itc\CUncachedArea::endCapture();?>
+<?endif;?>

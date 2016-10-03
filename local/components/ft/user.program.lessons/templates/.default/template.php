@@ -7,6 +7,12 @@
 		</h1>
 	</header>
 	
+	<?if($arResult['PROGRAM']['IS_PILOT']):?>
+		<div class="alert alert-warning">
+			У вас <strong>пробная</strong> версия программы, для нее доступна только часть уроков. Если вам понравилось, то вы можете <a href="javascript:void(0);">приобрести</a> данную программу.
+		</div>
+	<?endif;?>
+	
 	<?/*
 	<div class="post-content clearfix">
 		<?=$arResult['PROGRAM']['DETAIL_TEXT']?>

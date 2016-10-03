@@ -13,7 +13,7 @@
 $this->setFrameMode(true);
 ?>
 
-<article class="post-wrapper clearfix">
+<article class="programm-detail post-wrapper clearfix">
 
 	<header class="post-header">
 

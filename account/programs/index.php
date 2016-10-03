@@ -9,9 +9,14 @@ $hasAccess = ft\CUserAuthorization::checkAuthorization();
 
 if($hasAccess):
 	$arProgramIds = ft\CUserPrograms::getProgramIds($GLOBALS['USER']->getId());
+	$arPilotProgramIds = ft\CUserPrograms::getProgramIds($GLOBALS['USER']->getId(), true);
 	if(empty($arProgramIds)) {
 		$arProgramIds = false;
 	}
+	if(empty($arPilotProgramIds)) {
+		$arPilotProgramIds = array();
+	}
+	
 	$GLOBALS['arUserProgramsFilter'] = array('ID' => $arProgramIds);
 ?>
 	<?$APPLICATION->IncludeComponent(
@@ -108,7 +113,8 @@ if($hasAccess):
 				"news" => "",
 				"section" => "",
 				"detail" => "#ELEMENT_CODE#/",
-			)
+			),
+			'PILOT_PROGRAMS' => $arPilotProgramIds
 		),
 		false
 	);?>

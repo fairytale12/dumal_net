@@ -63,7 +63,8 @@ $this->setFrameMode(true);
 		"FILTER_NAME" => $arParams["FILTER_NAME"],
 		"HIDE_LINK_WHEN_NO_DETAIL" => $arParams["HIDE_LINK_WHEN_NO_DETAIL"],
 		"CHECK_DATES" => $arParams["CHECK_DATES"],
-		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N')
+		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N'),
+		'PILOT_PROGRAMS' => $arParams['PILOT_PROGRAMS'],
 	),
 	$component
 );?>

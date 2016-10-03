@@ -28,10 +28,10 @@ class CUserRegistration {
 		return $arFields;
 	}
 	
-	public static function sendEmailConfirm($arEventFields) {
+	public static function sendEmailConfirm($arEventFields, $additionalAttr = '') {
 		
 		$event = new \CEvent;
-		$arEventFields['CONFIRM_LINK'] = 'http://' . $_SERVER['HTTP_HOST'] . '/confirm/?confirm_user_id=' . $arEventFields['USER_ID'] . '&confirm_code=' . $arEventFields['CONFIRM_CODE'];
+		$arEventFields['CONFIRM_LINK'] = 'http://' . $_SERVER['HTTP_HOST'] . '/confirm/?confirm_user_id=' . $arEventFields['USER_ID'] . '&confirm_code=' . $arEventFields['CONFIRM_CODE'] . $additionalAttr;
 		$arEventFields['CLEAN_UP_DAYS'] = \COption::GetOptionString('main', 'new_user_registration_cleanup_days');
 		$arEventFields['CLEAN_UP_DAYS_TEXT'] = CHelper::wordDeclension($arEventFields['CLEAN_UP_DAYS'], 'дня', 'дней', 'дней');
 		$event->SendImmediate("NEW_USER_CONFIRM", SITE_ID, $arEventFields);

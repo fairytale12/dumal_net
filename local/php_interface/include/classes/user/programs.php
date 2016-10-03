@@ -8,7 +8,7 @@ class CUserPrograms {
 	/**
 	 * Получаем купленные программы пользователя
 	 */
-	public static function get($userId, $programId = false, $allData = false) {
+	public static function get($userId, $programId = false, $allData = false, $isPilot = false) {
 		$userId = intval($userId);
 		if(empty($userId)) {
 			return false;
@@ -27,6 +27,10 @@ class CUserPrograms {
 		
 		if($programId) {
 			$arFilter['UF_PROGRAM'] = $programId;
+		}
+		
+		if($isPilot) {
+			$arFilter['UF_IS_PILOT'] = 1;
 		}
 		
 		$rsElement = $modelObj->getList($arSelect, $arFilter, array('UF_DATE_CREATE' => 'DESC'));
@@ -76,15 +80,19 @@ class CUserPrograms {
 	/**
 	 * Добавление купленной программы для пользователя
 	 */
-	public static function add($userId, $programId) {
+	public static function add($userId, $programId, $isPilot = false) {
 		
+		$elementId = null;
 		$programId = intval($programId);
 		if(empty($programId)) {
 			return false;
 		}
 		
 		if($arElement = self::get($userId, $programId)) {
-			return false;
+			$elementId = $arElement['ID'];
+			if(!$arElement['UF_IS_PILOT']) {
+				return false;
+			}
 		}
 		
 		
@@ -103,9 +111,16 @@ class CUserPrograms {
 		$arFields = array(
 			'UF_USER_ID' => $userId,
 			'UF_PROGRAM' => $programId,
-			'UF_DATE_CREATE' => $dateCreate
+			'UF_DATE_CREATE' => $dateCreate,
+			'UF_IS_PILOT' => ($isPilot ? 1 : 0)
 		);
-		return $modelObj->add($arFields);
+		
+		if(is_null($elementId)) {
+			return $modelObj->add($arFields);
+		} else {
+			$modelObj->update($elementId, $arFields);
+			return $elementId;
+		}
 		
 	}
 	
@@ -125,8 +140,8 @@ class CUserPrograms {
 	/**
 	 * Получает ID купленных программ
 	 */
-	public static function getProgramIds($userId) {
-		if(!$arElements = self::get($userId, false, true)) {
+	public static function getProgramIds($userId, $isPilot = false) {
+		if(!$arElements = self::get($userId, false, true, $isPilot)) {
 			return false;
 		}
 		
@@ -171,12 +186,19 @@ class CUserPrograms {
 		
 		
 		$arProgramIds = array();
+		$arPilotProgramIds = array();
 		$arTmpPrograms = array();
 		foreach($arPrograms as $arElement) {
 			if(empty($arElement['UF_PROGRAM'])) {
 				continue;
 			}
+			
 			$arProgramIds[] = $arElement['UF_PROGRAM'];
+			
+			if($arElement['UF_IS_PILOT']) {
+				$arPilotProgramIds[] = $arElement['UF_PROGRAM'];
+			}
+			
 			$arTmpPrograms[$arElement['UF_PROGRAM']] = $arElement;
 		}
 		$arPrograms = $arTmpPrograms;
@@ -203,25 +225,37 @@ class CUserPrograms {
 		}
 		$arProgram = $obProgram->getFields();
 		$arProgram['PROPERTIES'] = $obProgram->getProperties();
-
+		
+		$arProgram['IS_PILOT'] = false;
+		
+		if(in_array($arProgram['ID'], $arPilotProgramIds)) {
+			$arProgram['IS_PILOT'] = true;
+		}
+		
 		$arLessons = array();
 		
 		$arFilter = array(
 			'=UF_PROGRAM' => $arProgram['ID'],
 		);
-
-		if(!$arProgram['PROPERTIES']['IS_CLOSED']['VALUE_ENUM_ID'] && !empty($arPrograms[$arProgram['ID']])) {
-			// Если программа не закончена, то вводим фильтр по дате покупки
-			$programKey = array_search($arProgram['ID'], $arPrograms[$arProgram['ID']]);
-			if(!empty($arPrograms[$arProgram['ID']]['UF_DATE_CREATE'])) {
-				// Если удалось найти программу в списке купленных
-				$buyDate = trim($arPrograms[$arProgram['ID']]['UF_DATE_CREATE']->toString());
+		
+		if(!$arProgram['IS_PILOT']) {
+		
+			if(!$arProgram['PROPERTIES']['IS_CLOSED']['VALUE_ENUM_ID'] && !empty($arPrograms[$arProgram['ID']])) {
+				// Если программа не закончена, то вводим фильтр по дате покупки
+				$programKey = array_search($arProgram['ID'], $arPrograms[$arProgram['ID']]);
+				if(!empty($arPrograms[$arProgram['ID']]['UF_DATE_CREATE'])) {
+					// Если удалось найти программу в списке купленных
+					$buyDate = trim($arPrograms[$arProgram['ID']]['UF_DATE_CREATE']->toString());
+				}
+				
+				if(strtotime($buyDate)) {
+					// Если дата корректна, то подставляем ее в фильтр
+					$arFilter['>=UF_DATE_UPDATE'] = $buyDate;
+				}
 			}
-			
-			if(strtotime($buyDate)) {
-				// Если дата корректна, то подставляем ее в фильтр
-				$arFilter['>=UF_DATE_UPDATE'] = $buyDate;
-			}
+		
+		} else {
+			$arFilter['UF_IS_PILOT'] = 1;
 		}
 		
 		$arLessonIds = array();
@@ -310,11 +344,17 @@ class CUserPrograms {
 		}
 		
 		$arProgramIds = array();
+		$arPilotProgramIds = array();
 		foreach($arPrograms as $arElement) {
 			if(empty($arElement['UF_PROGRAM'])) {
 				continue;
 			}
+			
 			$arProgramIds[] = $arElement['UF_PROGRAM'];
+			
+			if($arElement['UF_IS_PILOT']) {
+				$arPilotProgramIds[] = $arElement['UF_PROGRAM'];
+			}
 		}
 		
 		$arSort = array('ID' => 'ASC');
@@ -344,6 +384,12 @@ class CUserPrograms {
 		$arProgram = $obProgram->getFields();
 		$arProgram['PROPERTIES'] = $obProgram->getProperties();
 		
+		$arProgram['IS_PILOT'] = false;
+		
+		if(in_array($arProgram['ID'], $arPilotProgramIds)) {
+			$arProgram['IS_PILOT'] = true;
+		}
+		
 		$arFilter = array(
 			'=UF_PROGRAM' => $arProgram['ID'],
 			'=ID' => $lessonId
@@ -352,6 +398,10 @@ class CUserPrograms {
 		$modelObj = model\CProgramLessonsModel::getInstance();
 		if(!$arLesson = $modelObj->getList(array('*'), $arFilter, array())->fetch()) {
 			return CHelper::returnAnswer(-5, 'Урок не найден');
+		}
+		
+		if($arProgram['IS_PILOT'] && !$arLesson['UF_IS_PILOT']) {
+			return CHelper::returnAnswer(-5, 'Урок не доступен');
 		}
 		
 		$arTasks = array();
@@ -567,6 +617,43 @@ class CUserPrograms {
 		return $arUsers;
 	}
 	
+	/**
+	 * Добавление бесплатной программы
+	 */
+	public static function addPilotProgramToUser($programId, $userId) {
+		
+		$programId = intval($programId);
+		$userId = intval($userId);
+		
+		if(empty($programId) || empty($userId)) {
+			return false;
+		}
+		
+		if(!self::get($userId, $programId)) {
+			// Проверяет есть ли программа, если нет - добавляет
+			self::add($userId, $programId, true);
+		}
+		
+		$modelObj = model\CPilotProgramsModel::getInstance();
+		
+		if($modelObj->getList(array('*'), array('=UF_PROGRAM' => $programId, '=UF_USER_ID' => $userId))->fetch()) {
+			// Проверяет, добавлена ли запись о пробной программе
+			return true;
+		}
+		
+		// Если нет - создает
+		$modelObj->add(array(
+			'UF_PROGRAM' 		=> $programId,
+			'UF_USER_ID' 		=> $userId,
+			'UF_DATE_CREATE' 	=> \ConvertTimeStamp(time(), 'FULL', 's1')
+		));
+		
+		return true;
+	}
+	
+	
+	
+	
 	/** Агенты */
 	
 	/**
@@ -650,6 +737,91 @@ class CUserPrograms {
 		return 'ft\CUserPrograms::newLessonSendInfoAgent();';
 		
 	}
+	
+	/**
+	 * Уведомление о дате начала занятия
+	 */ 
+	public static function lessonSoonBeginAgent() {
+		
+		// раз в 5 минут
+		
+		Loader::includeModule('iblock');
+		
+		$arPrograms = array();
+		$arProgramIds = array();
+		$arLessons = array();
+		
+		// Получаем все занятия, которые начнутся через час
+		$modelObj = model\CProgramLessonsModel::getInstance();
+		$arFilter = array(
+			'!UF_DATE_BEGIN' => false,
+			'<=UF_DATE_BEGIN' => \ConvertTimeStamp(time() + 3600, 'FULL', 's1'),
+		);
+		$rsLessons = $modelObj->getList(array('ID', 'UF_PROGRAM', 'UF_NAME'), $arFilter, array('ID' => 'ASC'));
+		while($arLesson = $rsLessons->fetch()) {
+			
+			if(empty($arLesson['UF_PROGRAM'])) {
+				continue;
+			}
+			
+			$arLessons[] = $arLesson;
+			$arProgramIds[] = $arLesson['UF_PROGRAM'];
+		}
+		
+		if(!empty($arProgramIds)) {
+			// Если программы есть, то получаем их и пользователей, у которых куплена эта программа
+			$arProgramIds = array_unique($arProgramIds);
+			$rsProgram = \CIBlockElement::getList(
+				array(), 
+				array(
+					'=IBLOCK_ID' => PROGRAM_IBLOCK_ID, 
+					'=ID' => $arProgramIds
+				), 
+				false, 
+				false, 
+				array(
+					'ID', 
+					'NAME', 
+					'CODE', 
+				)
+			);
+			while($arProgram = $rsProgram->getNext()) {
+				$arProgram['USERS'] = \ft\CUserPrograms::getProgramUsers($arProgram['ID']);
+				$arPrograms[$arProgram['ID']] = $arProgram;
+			}
+			
+			foreach($arLessons as $arLesson) {
+				// Отсылаем уведомления по каждому занятию для каждого пользователя
+				$arProgram = $arPrograms[$arLesson['UF_PROGRAM']];
+				if(empty($arProgram)) {
+					continue;
+				}
+			
+				if(!empty($arProgram['USERS']) && is_array($arProgram['USERS'])) {
+					foreach($arProgram['USERS'] as $arUser) {
+					
+						if(empty($arUser['EMAIL'])) {
+							continue;
+						}
+						
+						$arEventFields = array(
+							'PROGRAM_NAME' 	=> $arProgram['NAME'],
+							'LESSON_NAME' 	=> $arLesson['UF_NAME'],
+							'PROGRAM_LINK' 	=> CHelper::getDomain() . self::getLessonLink($arProgram['CODE'], $arLesson['ID']),
+							'EMAIL' 		=> $arUser['EMAIL']
+						);
+						
+						\CEvent::send('FT_ADDED_LESSON_SOON_BEGIN', 's1', $arEventFields);
+					}
+				}
+				
+			}
+		}
+		
+		return 'ft\CUserPrograms::lessonSoonBeginAgent();';
+		
+	}
+	
 	
 }
 

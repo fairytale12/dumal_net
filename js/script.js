@@ -301,7 +301,7 @@ if(document.getElementById("countUp")){
 }
 
 // 18. Header Search Button
-new UISearch( document.getElementById( 'sb-search' ) );
+//new UISearch( document.getElementById( 'sb-search' ) );
 
 // 19. Google Map
 var map_canvas =  document.getElementById('map-canvas');

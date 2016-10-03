@@ -39,7 +39,11 @@ if($arParams['IS_AJAX']) {
 						</a>
 					<?endif;?>
 					<span class="category">
-						<?=ft\CHelper::wordDeclension($arItem['PROPERTIES']['MAX_LESSONS']['VALUE'], 'занятие', 'занятия', 'занятий')?>
+						<?if(!in_array($arItem['ID'], $arParams['PILOT_PROGRAMS'])):?>
+							<?=ft\CHelper::wordDeclension($arItem['PROPERTIES']['MAX_LESSONS']['VALUE'], 'занятие', 'занятия', 'занятий')?>
+						<?else:?>
+							пробная
+						<?endif;?>
 					</span>
 					<header class="news-details">
 						<h3 class="news-title">

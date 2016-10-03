@@ -3,6 +3,7 @@ namespace ft;
 
 use Bitrix\Main;
 use Bitrix\Main\Authentication\ApplicationPasswordTable;
+use Bitrix\Main\UserTable;
 
 class CUser extends \CUser {
 	
@@ -585,6 +586,109 @@ class CUser extends \CUser {
 		}
 
 		return $result_message;
+	}
+	
+	
+	public static function getUser($userId = null) {
+		if(is_null($userId)) {
+			$userId = $GLOBALS['USER']->getId();
+		}
+		
+		$userId = intval($userId);
+		if(empty($userId)) {
+			return false;
+		}
+		
+		if(!$arUser = \CUser::getList($by = 'personal_country', $order = 'asc', array('ID' => $userId), array('SELECT' => array('UF_*')))->fetch()) {
+			return false;
+		}
+		
+		return $arUser;
+	}
+	
+	
+	public static function changeConfirmCode($userId) {
+		
+		$userId = intval($userId);
+		if(empty($userId)) {
+			return false;
+		}
+		
+		$confirmCode = randString(8);
+		
+		$user = new \CUser();
+		
+		if(!$user->update($userId, array(
+			'CONFIRM_CODE' => $confirmCode
+		))) {
+			return false;
+		}
+		
+		return $confirmCode;
+	}
+	
+	
+	public static function pilotProgram($programId, $email) {
+		$programId = intval($programId);
+		$email = trim($email);
+		
+		if(empty($programId)) {
+			return CHelper::returnAnswer(-1, 'Не передан ID программы');
+		}
+		
+		if(empty($email)) {
+			return CHelper::returnAnswer(-2, 'Укажите email');
+		}
+		
+		if(!check_email($email)) {
+			return CHelper::returnAnswer(-3, 'Неправильный e-mail');
+		}
+		
+		$arResult = CUserValidation::checkEmail($email, true);
+		if($arResult['CODE'] <= 0 && $arResult['CODE'] != -3) {
+			return CHelper::returnAnswer(-4, $arResult['TEXT']);
+		}
+		
+		if($arResult['CODE'] != -3) {
+			// Пользователь с таким email найден
+			
+			// Проверяем наличие программы
+			if($arProgram = CUserPrograms::get($arResult['USER_ID'], $programId, true)) {
+				if($arProgram['UF_IS_PILOT']) {
+					// Программа есть у пользователя в пробном режиме
+					return CHelper::returnAnswer(1, 'Вы уже преобрели пробную версию программы');
+				} else {
+					// Программа уже куплена пользователем
+					return CHelper::returnAnswer(1, 'Вы уже купили данную программу');
+				}
+			}
+			
+			// Если пользователь найден и него нет данной программы
+			// то отсылаем ему код подтверждения
+			$confirmCode = self::changeConfirmCode($arResult['USER_ID']);
+			$arUser = self::getUser($arResult['USER_ID']);
+			
+			CUserRegistration::sendEmailConfirm($arUser, '&pilot=1&program=' . $programId);
+			return CHelper::returnAnswer(1, 'Вам на почту отправлена ссылка для подтвеждения');
+			
+		} else {
+			// Пользователь не найден
+			
+			$arFields = array(
+				'EMAIL' => $email,
+				'PASSWORD' => randString(8)
+			);
+			
+			$arFields = CUserRegistration::prepareFields($arFields, true);
+			$user = new \CUser();
+			if(!$userId = $user->add($arFields)) {
+				return CHelper::returnAnswer(-5, 'Возникла ошибка при добавлении пользователя, пвторите чуть позже.');
+			}
+			
+			CUserRegistration::sendEmailConfirm($arFields, '&pilot=1&program=' . $programId);
+			return CHelper::returnAnswer(1, 'Вам на почту отправлена ссылка для подтвеждения');
+		}
+		
 	}
 	
 }

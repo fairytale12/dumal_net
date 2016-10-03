@@ -1,5 +1,5 @@
 <?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
+if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 {
 	die();
 }
@@ -19,105 +19,156 @@ Params:
  * @var array $arResult
  */
 
-$arParams["USER_ID"] = trim($arParams["USER_ID"]);
-if(strlen($arParams["USER_ID"]) <= 0)
-	$arParams["USER_ID"] = "confirm_user_id";
+$arParams['USER_ID'] = trim($arParams['USER_ID']);
+if(strlen($arParams['USER_ID']) <= 0)
+	$arParams['USER_ID'] = 'confirm_user_id';
 
-$arParams["CONFIRM_CODE"] = trim($arParams["CONFIRM_CODE"]);
-if(strlen($arParams["CONFIRM_CODE"]) <= 0)
-	$arParams["CONFIRM_CODE"] = "confirm_code";
+$arParams['CONFIRM_CODE'] = trim($arParams['CONFIRM_CODE']);
+if(strlen($arParams['CONFIRM_CODE']) <= 0)
+	$arParams['CONFIRM_CODE'] = 'confirm_code';
 
-$arParams["LOGIN"] = trim($arParams["LOGIN"]);
-if(strlen($arParams["LOGIN"]) <= 0)
-	$arParams["LOGIN"] = "login";
+$arParams['LOGIN'] = trim($arParams['LOGIN']);
+if(strlen($arParams['LOGIN']) <= 0)
+	$arParams['LOGIN'] = 'login';
 
-$arResult["~USER_ID"] = $_REQUEST[$arParams["USER_ID"]];
-$arResult["USER_ID"] = intval($arResult["~USER_ID"]);
+$arResult['~USER_ID'] = $_REQUEST[$arParams['USER_ID']];
+$arResult['USER_ID'] = intval($arResult['~USER_ID']);
 
-$arResult["~CONFIRM_CODE"] = trim($_REQUEST[$arParams["CONFIRM_CODE"]]);
-$arResult["CONFIRM_CODE"] = htmlspecialcharsbx($arResult["~CONFIRM_CODE"]);
+$arResult['~CONFIRM_CODE'] = trim($_REQUEST[$arParams['CONFIRM_CODE']]);
+$arResult['CONFIRM_CODE'] = htmlspecialcharsbx($arResult['~CONFIRM_CODE']);
 
-$arResult["~LOGIN"] = trim($_REQUEST[$arParams["LOGIN"]]);
-$arResult["LOGIN"] = htmlspecialcharsbx($arResult["~LOGIN"]);
+$arResult['~LOGIN'] = trim($_REQUEST[$arParams['LOGIN']]);
+$arResult['LOGIN'] = htmlspecialcharsbx($arResult['~LOGIN']);
 
-if($USER->IsAuthorized())
-{
-	$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E02");
-	$arResult["MESSAGE_CODE"] = "E02";
-	$arResult["SHOW_FORM"] = false;
-}
-else
-{
-	if($arResult["USER_ID"] <= 0 && strlen($arResult["~LOGIN"]) > 0)
-	{
-		$rsUser = CUser::GetByLogin($arResult["~LOGIN"]);
+if($USER->IsAuthorized() && strlen($arResult['CONFIRM_CODE']) <= 0) {
+	$arResult['MESSAGE_TEXT'] = 'Вы авторизованы';
+	$arResult['MESSAGE_CODE'] = -1;
+} elseif(strlen($arResult['CONFIRM_CODE']) <= 0) {
+	$arResult['MESSAGE_TEXT'] = 'Укажите код подтверждения';
+	$arResult['MESSAGE_CODE'] = -2;
+} elseif($arResult['USER_ID'] <= 0 && strlen($arResult['~LOGIN']) <= 0) {
+	$arResult['MESSAGE_TEXT'] = 'Укажите ID пользователя или Логин';
+	$arResult['MESSAGE_CODE'] = -3;
+} else {
+
+
+	if($arResult['USER_ID'] <= 0 && strlen($arResult['~LOGIN']) > 0) {
+		$rsUser = CUser::GetByLogin($arResult['~LOGIN']);
+	} else {
+		$rsUser = CUser::GetByID($arResult['USER_ID']);
 	}
-	else
-	{
-		$rsUser = CUser::GetByID($arResult["USER_ID"]);
-	}
 
-	if($arResult["USER"] = $rsUser->GetNext())
-	{
-		if($arResult["USER"]["ACTIVE"] === "Y")
-		{
-			$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E03");
-			$arResult["MESSAGE_CODE"] = "E03";
-			$arResult["SHOW_FORM"] = false;
-		}
-		else
-		{
-			if(strlen($arResult["CONFIRM_CODE"]) <= 0)
-			{
-				$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E04");
-				$arResult["MESSAGE_CODE"] = "E04";
-				$arResult["SHOW_FORM"] = true;
-			}
-			elseif($arResult["~CONFIRM_CODE"] !== $arResult["USER"]["~CONFIRM_CODE"])
-			{
-				$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E05");
-				$arResult["MESSAGE_CODE"] = "E05";
-				$arResult["SHOW_FORM"] = true;
-			}
-			else
-			{
-				$obUser = new CUser;
-				$obUser->Update($arResult["USER"]["ID"], array("ACTIVE" => "Y", "CONFIRM_CODE" => ""));
-				
-				// Подписка
-				ft\CSubscribe::confirm($arResult["USER"]["ID"], '', array(), false);
-				
-				$rsUser = CUser::GetByID($arResult["USER"]["ID"]);
-				$arResult["USER_ACTIVE"] = $rsUser->GetNext();
-				if($arResult["USER_ACTIVE"] && $arResult["USER_ACTIVE"]["ACTIVE"] === "Y")
-				{
-					$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E06");
-					$arResult["MESSAGE_CODE"] = "E06";
-					$arResult["SHOW_FORM"] = false;
+	if($arResult['USER'] = $rsUser->GetNext()) {
+		// Пользователь нашелся
+		
+		if($arResult['USER']['ACTIVE'] === 'Y' && (empty($_GET['pilot']) && empty($_GET['program']))) {
+			// Пользователь уже активен и доп. параметров нет
+			
+			$arResult['MESSAGE_TEXT'] = 'Ваш пользователь уже подтвержден';
+			$arResult['MESSAGE_CODE'] = 1;
+			
+		} elseif($arResult['USER']['ACTIVE'] === 'Y' && (!empty($_GET['pilot']) && !empty($_GET['program']))) {
+			// Пользователь уже активен и доп. параметры есть
+			
+			if($arResult['~CONFIRM_CODE'] !== $arResult['USER']['~CONFIRM_CODE']) {
+				// Неправильный код подтверждения
+				$arResult['MESSAGE_TEXT'] = 'Неправильный код подтверждения';
+				$arResult['MESSAGE_CODE'] = -4;
+			} else {
+				// Верный код подтверждения
+				if(!ft\CUserPrograms::addPilotProgramToUser($_GET['program'], $arResult['USER']['ID'])) {
+					// Не удалось добавить пробную программу
+					$arResult['MESSAGE_TEXT'] = 'Не удалось добавить пробную программу, попробуйте позже';
+					$arResult['MESSAGE_CODE'] = -5;
+				} else {
+					// Добавлена пробная программа
+					
+					// Все ок - удаляем код подтверждения
+					$obUser = new CUser;
+					if(!$obUser->Update($arResult['USER']['ID'], array('CONFIRM_CODE' => ''))) {
+						$arResult['MESSAGE_TEXT'] = 'Ошибка при обновлении пользователя, попробуйте чуть позже';
+						$arResult['MESSAGE_CODE'] = -6;
+					} else {
+						$arResult['MESSAGE_TEXT'] = 'Пробная программа добавлена!';
+						$arResult['MESSAGE_CODE'] = 1;
+					}
 				}
-				else
-				{
-					$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E07");
-					$arResult["MESSAGE_CODE"] = "E07";
-					$arResult["SHOW_FORM"] = true;
-				}
+			}
+			
+		} elseif($arResult['USER']['ACTIVE'] !== 'Y') {
+			// Пользователь не активен
+
+			if($arResult['~CONFIRM_CODE'] !== $arResult['USER']['~CONFIRM_CODE']) {
+				// Неправильный код подтверждения
+				$arResult['MESSAGE_TEXT'] = 'Неправильный код подтверждения';
+				$arResult['MESSAGE_CODE'] = -4;
 				
-				$GLOBALS['USER']->Authorize($arResult["USER_ACTIVE"]['ID']);
-				LocalRedirect('/account/');
+			} else {
+				
+				// Правильный код подтверждения
+				
+				if(!empty($_GET['pilot']) && !empty($_GET['program'])) {
+					// Доп. параметры
+					
+					if(!ft\CUserPrograms::addPilotProgramToUser($_GET['program'], $arResult['USER']['ID'])) {
+						// Не удалось добавить пробную программу
+						$arResult['MESSAGE_TEXT'] = 'Не удалось добавить пробную программу, попробуйте позже';
+						$arResult['MESSAGE_CODE'] = -5;
+						
+					} else {
+						// Добавлена пробная программа
+						$password = randString(8);
+						
+						// Все ок - удаляем код подтверждения, активируем пользователя и устанавливаем ему пароль
+						$obUser = new CUser;
+						if(!$obUser->Update($arResult['USER']['ID'], array('ACTIVE' => 'Y', 'CONFIRM_CODE' => '', 'PASSWORD' => $password))) {
+							$arResult['MESSAGE_TEXT'] = 'Ошибка при активации пользователя, попробуйте чуть позже';
+							$arResult['MESSAGE_CODE'] = -6;
+						} else {
+
+							$arEventFields = $arResult['USER'];
+							$arEventFields['PASSWORD'] = $password;
+							
+							// Подписка
+							ft\CSubscribe::confirm($arResult['USER']['ID'], '', array(), false);
+							
+							// Отсылаем доступы от пользователя на почту
+							\CEvent::Send('FT_NEW_USER_ACCESS', array('s1'), $arEventFields);
+							
+							$arResult['MESSAGE_TEXT'] = 'Пользователь подтвержден, пробная программа добавлена. Вам на почту высланы доступы!';
+							$arResult['MESSAGE_CODE'] = 1;
+							
+							$GLOBALS['USER']->Authorize($arResult['USER_ACTIVE']['ID']);
+							LocalRedirect('/account/');
+						}
+					}
+
+				} else {
+					// Без доп. параметров
+					$obUser = new CUser;
+					if(!$obUser->Update($arResult['USER']['ID'], array('ACTIVE' => 'Y', 'CONFIRM_CODE' => ''))) {
+						$arResult['MESSAGE_TEXT'] = 'Ошибка при активации пользователя, попробуйте чуть позже';
+						$arResult['MESSAGE_CODE'] = -6;
+					} else {
+				
+						// Подписка
+						ft\CSubscribe::confirm($arResult['USER']['ID'], '', array(), false);
+						
+						$arResult['MESSAGE_TEXT'] = 'Пользователь подтвержден!';
+						$arResult['MESSAGE_CODE'] = 1;
+						
+						$GLOBALS['USER']->Authorize($arResult['USER_ACTIVE']['ID']);
+						LocalRedirect('/account/');
+					}
+				}
 			}
 		}
-	}
-	else
-	{
-		$arResult["MESSAGE_TEXT"] = GetMessage("CC_BSAC_MESSAGE_E01");
-		$arResult["MESSAGE_CODE"] = "E01";
-		$arResult["SHOW_FORM"] = true;
+		
+	} else {
+		$arResult['MESSAGE_TEXT'] = 'Пользователь не найден';
+		$arResult['MESSAGE_CODE'] = -2;
 	}
 }
 
-$arResult["~FORM_ACTION"] = $APPLICATION->GetCurPageParam();
-$arResult["FORM_ACTION"] = htmlspecialcharsbx($arResult["~FORM_ACTION"]);
-
-//echo "<pre>",htmlspecialcharsbx(print_r($arResult, true)),"</pre>";
 $this->IncludeComponentTemplate();
 ?>

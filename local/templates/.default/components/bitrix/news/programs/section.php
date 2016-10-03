@@ -12,7 +12,7 @@
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 ?>
-
+<div class="col-md-8">
 <?$APPLICATION->IncludeComponent(
 	"bitrix:news.list",
 	"",
@@ -70,4 +70,15 @@ $this->setFrameMode(true);
 		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N')
 	),
 	$component
+);?>
+</div>
+<?$APPLICATION->IncludeComponent(
+	"bitrix:main.include",
+	"",
+	Array(
+		"AREA_FILE_RECURSIVE" => "Y",
+		"AREA_FILE_SHOW" => "sect",
+		"AREA_FILE_SUFFIX" => "sidebar",
+		"EDIT_TEMPLATE" => ""
+	)
 );?>
