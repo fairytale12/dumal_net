@@ -754,7 +754,7 @@ class CUserPrograms {
 		// Получаем все занятия, которые начнутся через час
 		$modelObj = model\CProgramLessonsModel::getInstance();
 		$arFilter = array(
-			'UF_NOTIFY_SOON_BEGIN' => 0
+			'UF_NOTIFY_SOON_BEGIN' => 0,
 			'!UF_DATE_BEGIN' => false,
 			'<=UF_DATE_BEGIN' => \ConvertTimeStamp(time() + 3600, 'FULL', 's1'),
 		);
