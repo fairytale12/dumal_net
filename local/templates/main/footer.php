@@ -49,7 +49,7 @@
 			)
 		);?>
 		
-		<div id="go-top-button" class="fa fa-angle-up" title="Scroll To Top"></div>
+		<div id="go-top-button" class="fa fa-angle-up" title="В начало"></div>
 		<div class="mobile-overlay" id="mobile-overlay"></div>
 		<?/*
 		<!-- Jquery js -->
@@ -79,26 +79,31 @@
 		-->
 		
 		<div style="display: none;">
+			<?/*
 			<div id="login-user-not-found">
 				<p>Пользователь с таким профилем не найден на сайте. Перейти к регистрации?</p>
 				<a href="javascript:void(0);" onclick="return ftHelper.showRegistration();">Да</a> / 
 				<a href="javascript: void(0);" onclick="return ftHelper.showLoginForm();">Отмена</a>
 			</div>
+			*/?>
 			
+			<?/*
 			<div id="registration-user-confirm">
 				На вашу почту отправлено письмо, пожалуйста, подтвердите свой e-mail.
 			</div>
-			
+			*/?>
+			<?/*
 			<div id="social-registartion-user-exist">
 				<p>На сайте уже зарегистрирован пользователь с таким email. Перейти к авторизации?</p>
 				<a class="agree-link" href="javascript:void(0);" onclick="return ftHelper.showLoginForm(true, '#EMAIL#')">Да</a> / 
 				<a href="javascript:void(0);" onclick="return ftHelper.showRegistration(false, 3);">Нет</a>
 			</div>
-			
+			*/?>
+			<?/*
 			<div id="forgot-password-user-send">
 				На вашу почту отправлено письмо, пожалуйста, следуйте приведенным в нем инструкциям.
 			</div>
-			
+			*/?>
 		</div>
 		
 		<?$APPLICATION->IncludeComponent(

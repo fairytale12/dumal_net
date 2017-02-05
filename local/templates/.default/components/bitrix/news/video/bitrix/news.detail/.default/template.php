@@ -34,7 +34,11 @@ $this->setFrameMode(true);
 			</figure>
 		<?endif;?>
 	</header>
-
+	
+	<?if(!empty($arResult['PROGRAM'])):?>
+		<p>Интересно? Тогда обязательно поучаствуйте в программе &laquo;<a data-pjax="<?=ft\CHelper::getLinkId('/programs/')?>" href="<?=$arResult['PROGRAM']['DETAIL_PAGE_URL']?>"><?=$arResult['PROGRAM']['NAME']?></a>&raquo;!</p>
+	<?endif;?>
+	
 	<div class="post-content clearfix">
 		<?=$arResult['DETAIL_TEXT']?>
 	</div>
@@ -56,28 +60,31 @@ $this->setFrameMode(true);
 			<div class="row">
 				
 				<div class="post-nav-wrapper clearfix">
-					<?if(!empty($arResult['NEIGHBORS']['LEFT'])):?>
-						<div class="col-md-6 omega">
+					
+					<div class="col-md-6 omega">
+						<?if(!empty($arResult['NEIGHBORS']['LEFT'])):?>
 							<div class="previous-post">
 								<div class="post-nav-label">
 									<i class="fa fa-angle-left"></i>
 									Предыдущее видео
 								</div>
-								<a data-pjax="" href="<?=$arResult['NEIGHBORS']['LEFT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['LEFT']['NAME']?></a>
+								<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arResult['NEIGHBORS']['LEFT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['LEFT']['NAME']?></a>
 							</div>
-						</div>
-					<?endif;?>
-					<?if(!empty($arResult['NEIGHBORS']['RIGHT'])):?>
-						<div class="col-md-6 alpha text-right">
+						<?endif;?>
+					</div>
+					
+					<div class="col-md-6 alpha">
+						<?if(!empty($arResult['NEIGHBORS']['RIGHT'])):?>
 							<div class="next-post">
 								<div class="post-nav-label">
 									Следующее видео
 									<i class="fa fa-angle-right"></i>
 								</div>
-								<a data-pjax="" href="<?=$arResult['NEIGHBORS']['RIGHT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['RIGHT']['NAME']?></a>
+								<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arResult['NEIGHBORS']['RIGHT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['RIGHT']['NAME']?></a>
 							</div>
-						</div>
-					<?endif;?>
+						<?endif;?>
+					</div>
+					
 				</div>
 			</div>
 		<?endif;?>

@@ -32,8 +32,6 @@ if ($this->StartResultCache(false, false)) {
 		$arResult['AUTHOR']['FIO'] = ft\CHelper::getFio($arResult['AUTHOR']);
 	}
 	
-	//p($arResult);
-	
 	$this->IncludeComponentTemplate(); 
 }
 

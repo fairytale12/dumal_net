@@ -29,7 +29,7 @@ if($arParams['IS_AJAX']) {
 			<article id="<?=$this->GetEditAreaId($arItem['ID']);?>" class="simple-post simple-big clearfix">
 				<?if(!empty($arItem['PREVIEW_PICTURE'])):?>
 					<div class="simple-thumb">
-						<a data-pjax="" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>">
+						<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>">
 							<img alt="<?=$arItem['NAME']?>" title="<?=$arItem['NAME']?>" src="<?=ft\CTPic::resizeImage($arItem['PREVIEW_PICTURE']['ID'], 'crop', 255, 180)?>">
 						</a>
 					</div>
@@ -43,7 +43,7 @@ if($arParams['IS_AJAX']) {
 					</p>
 
 					<h3>
-						<a data-pjax="" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>"><?=$arItem['NAME']?></a>
+						<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>"><?=$arItem['NAME']?></a>
 					</h3>
 
 					<p class="excerpt">

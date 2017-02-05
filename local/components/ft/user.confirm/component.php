@@ -138,7 +138,7 @@ if($USER->IsAuthorized() && strlen($arResult['CONFIRM_CODE']) <= 0) {
 							$arResult['MESSAGE_TEXT'] = 'Пользователь подтвержден, пробная программа добавлена. Вам на почту высланы доступы!';
 							$arResult['MESSAGE_CODE'] = 1;
 							
-							$GLOBALS['USER']->Authorize($arResult['USER_ACTIVE']['ID']);
+							$GLOBALS['USER']->Authorize($arResult['USER']['ID']);
 							LocalRedirect('/account/');
 						}
 					}
@@ -157,7 +157,7 @@ if($USER->IsAuthorized() && strlen($arResult['CONFIRM_CODE']) <= 0) {
 						$arResult['MESSAGE_TEXT'] = 'Пользователь подтвержден!';
 						$arResult['MESSAGE_CODE'] = 1;
 						
-						$GLOBALS['USER']->Authorize($arResult['USER_ACTIVE']['ID']);
+						$GLOBALS['USER']->Authorize($arResult['USER']['ID']);
 						LocalRedirect('/account/');
 					}
 				}

@@ -5,7 +5,7 @@
 	<div>
 		<ul>
 			<li class="<?=($arItem['SELECTED'] ? 'active' : '')?>">
-				<a data-pjax="" href="/">Главная</a>
+				<a data-pjax="<?=ft\CHelper::getLinkId('/')?>" href="/">Главная</a>
 			</li>
 		<?
 		$previousLevel = 0;
@@ -30,7 +30,7 @@
 				<?else:?>
 				
 					<li class="<?=($arItem['SELECTED'] ? 'active' : '')?>">
-						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
+						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
 						<ul>
 				<?endif?>
 
@@ -41,14 +41,14 @@
 					<?if ($arItem["DEPTH_LEVEL"] == 1):?>
 						
 						<li class="<?=($arItem['SELECTED'] ? 'active' : '')?>">
-							<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"
+							<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"
 								<?=(!empty($arItem['PARAMS']['ONCLICK']) ? ' onclick="' . $arItem['PARAMS']['ONCLICK'] . '"' : '')?>><?=$arItem["TEXT"]?></a>
 						</li>
 						
 					<?else:?>
 					
 						<li class="<?=($arItem['SELECTED'] ? 'active' : '')?>">
-							<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"
+							<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"
 								<?=(!empty($arItem['PARAMS']['ONCLICK']) ? ' onclick="' . $arItem['PARAMS']['ONCLICK'] . '"' : '')?>><?=$arItem["TEXT"]?></a>
 						</li>
 						

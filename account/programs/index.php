@@ -5,7 +5,6 @@ $APPLICATION->SetTitle("Мои программы");
 <div class="col-md-8">
 <?
 $hasAccess = ft\CUserAuthorization::checkAuthorization();
-//v($hasAccess);
 
 if($hasAccess):
 	$arProgramIds = ft\CUserPrograms::getProgramIds($GLOBALS['USER']->getId());
@@ -114,7 +113,8 @@ if($hasAccess):
 				"section" => "",
 				"detail" => "#ELEMENT_CODE#/",
 			),
-			'PILOT_PROGRAMS' => $arPilotProgramIds
+			'PILOT_PROGRAMS' => $arPilotProgramIds,
+			'PJAX_LINK' => '/account/programs/'
 		),
 		false
 	);?>

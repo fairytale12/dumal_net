@@ -12,7 +12,7 @@ class CUserValidation {
 	 * @param bool $withoutUser - проверять только email, без наличия пользователя
 	 * @return array
 	 */
-	public function checkEmail($email, $active = false, $withoutUser = false, $confirmed = false) {
+	public function checkEmail($email, $active = false, $withoutUser = false, $checkConfirmed = false) {
 		
 		$arReturn = array(
 			'RESULT' => 'ERROR',
@@ -50,16 +50,9 @@ class CUserValidation {
 					)
 				);
 				
-				if($active) {
+				if($active && !$checkConfirmed) {
 					$arFilter['ACTIVE'] = 'Y';
 				}
-				/*
-				if($confirmed) {
-					$arFilter[0][0]['=UF_CONFIRMED_EMAIL'] = 1;
-					$arFilter[0][1]['=UF_CONFIRMED_EMAIL'] = 1;
-					$arFilter[0][2]['=UF_CONFIRMED_SEMAIL'] = 1;
-				}
-				*/
 				
 				if(!$arUser = UserTable::getList(array('select' => array('ID'), 'filter' => $arFilter))->fetch()) {
 					$arReturn = array(
@@ -68,8 +61,15 @@ class CUserValidation {
 						'TEXT' 		=> 'Пользователь с таким email не найден.'
 					);
 				} else {
-					$arReturn['TEXT'] = 'Пользователь с таким e-mail зарегистрирован в системе.';
-					$arReturn['CODE'] = -3;
+					
+					if($checkConfirmed && $arUser['ACTIVE'] != 'Y') {
+						$arReturn['TEXT'] = str_replace(array('#EMAIL#'), array($arUser['EMAIL']), UNCONFIRMED_USER_MESSAGE);
+						$arReturn['CODE'] = -4;
+					} elseif($arUser['ACTIVE'] == 'Y') {
+						$arReturn['TEXT'] = 'Пользователь с таким e-mail зарегистрирован в системе.';
+						$arReturn['CODE'] = -3;
+					}
+
 					$arReturn['USER_ID'] = $arUser['ID'];
 				}
 				
@@ -110,7 +110,9 @@ class CUserValidation {
 		return $arErrors;
 	}
 	
-	
+	/**
+	 * Проверка полей при регистрации
+	 */
 	public static function checkFields($arFields, $social = false) {
 		
 		$arReturn = array();
@@ -123,7 +125,7 @@ class CUserValidation {
 		}
 		*/
 		
-		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL']);
+		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL'], false, false, true);
 		if($arEmailValidation['CODE'] <= 0) {
 			$arReturn['ERRORS']['EMAIL'] = $arEmailValidation['TEXT'];
 		}
@@ -133,8 +135,8 @@ class CUserValidation {
 			$arReturn['ERRORS'] = array_merge($arReturn['ERRORS'], $arPasswordErrors);
 		}
 		
-		if(!empty($arReturn['FIELDS']['CAPTCHA_CODE'])) {
-			$arReturn['ERRORS']['CAPTCHA_CODE'] = 'Вы робот?';
+		if(empty($arReturn['FIELDS']['FORM_CHECK_INPUT'])) {
+			$arReturn['ERRORS']['FORM_CHECK_INPUT'] = 'Вы робот?';
 		}
 		
 		/*
@@ -146,6 +148,7 @@ class CUserValidation {
 		return $arReturn;
 	}
 	
+	
 	public static function checkLoginFields($arFields) {
 		$arReturn = array();
 		$arReturn['FIELDS'] = CHelper::prepareFields($arFields);
@@ -156,13 +159,13 @@ class CUserValidation {
 			$arReturn['ERRORS'] = array_merge($arReturn['ERRORS'], $arPasswordErrors);
 		}
 		
-		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL'], false, true);
-		if($arEmailValidation['CODE'] <= 0) {
+		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL'], false, false, true);
+		if($arEmailValidation['CODE'] <= 0 && $arEmailValidation['CODE'] != -3) {
 			$arReturn['ERRORS']['EMAIL'] = $arEmailValidation['TEXT'];
 		}
 		
-		if(!empty($arReturn['FIELDS']['CAPTCHA_CODE'])) {
-			$arReturn['ERRORS']['CAPTCHA_CODE'] = 'Вы робот?';
+		if(empty($arReturn['FIELDS']['FORM_CHECK_INPUT'])) {
+			$arReturn['ERRORS']['FORM_CHECK_INPUT'] = 'Вы робот?';
 		}
 		
 		return $arReturn;
@@ -173,14 +176,14 @@ class CUserValidation {
 		$arReturn['FIELDS'] = CHelper::prepareFields($arFields);
 		$arReturn['ERRORS'] = array();
 		
-		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL'], true, false);
+		$arEmailValidation = self::checkEmail($arReturn['FIELDS']['EMAIL'], true, false, true);
 		if($arEmailValidation['CODE'] != -3) {
 			// Если пользователь не найден, или email некорректен
 			$arReturn['ERRORS']['EMAIL'] = $arEmailValidation['TEXT'];
 		}
 		
-		if(!empty($arReturn['FIELDS']['CAPTCHA_CODE'])) {
-			$arReturn['ERRORS']['CAPTCHA_CODE'] = 'Вы робот?';
+		if(empty($arReturn['FIELDS']['FORM_CHECK_INPUT'])) {
+			$arReturn['ERRORS']['FORM_CHECK_INPUT'] = 'Вы робот?';
 		}
 		
 		if($captchaCode) {
@@ -203,8 +206,8 @@ class CUserValidation {
 			$arReturn['ERRORS'] = array_merge($arReturn['ERRORS'], $arPasswordErrors);
 		}
 				
-		if(!empty($arReturn['FIELDS']['CAPTCHA_CODE'])) {
-			$arReturn['ERRORS']['CAPTCHA_CODE'] = 'Вы робот?';
+		if(empty($arReturn['FIELDS']['FORM_CHECK_INPUT'])) {
+			$arReturn['ERRORS']['FORM_CHECK_INPUT'] = 'Вы робот?';
 		}
 		
 		return $arReturn;

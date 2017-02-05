@@ -10,6 +10,9 @@ class CUserRegistration {
 		$bConfirmReq = (\COption::GetOptionString('main', 'new_user_registration_email_confirmation', 'N') == 'Y' && $emailRequired && $confirm);
 		
 		
+		$arFields['EMAIL'] = trim($arFields['EMAIL']);
+		$arFields['UF_SOC_EMAIL'] = trim($arFields['UF_SOC_EMAIL']);
+		
 		$arFields['CHECKWORD'] = md5(\CMain::GetServerUniqID().uniqid());
 		$arFields['~CHECKWORD_TIME'] = $GLOBALS['DB']->CurrentTimeFunction();
 		$arFields['CONFIRM_CODE'] = $bConfirmReq? randString(8): "";
@@ -19,10 +22,14 @@ class CUserRegistration {
 
 		$arFields['USER_IP'] = $_SERVER['REMOTE_ADDR'];
 		$arFields['USER_HOST'] = @gethostbyaddr($_SERVER['REMOTE_ADDR']);
-				
+		
 		$defGroup = \COption::GetOptionString('main', 'new_user_registration_def_group', '');
 		if($defGroup != '') {
 			$arFields['GROUP_ID'] = explode(',', $defGroup);
+		}
+		
+		if(!empty($arFields['UF_SOC_EMAIL']) && !empty($arFields['EMAIL']) && $arFields['UF_SOC_EMAIL'] == $arFields['EMAIL']) {
+			$arFields['ACTIVE'] = 'Y';
 		}
 		
 		return $arFields;

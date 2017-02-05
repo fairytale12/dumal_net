@@ -17,10 +17,11 @@ $this->setFrameMode(true);
 	"ft:user.program.lesson",
 	"",
 	Array(
-		"CACHE_TIME" => "3600",
-		"CACHE_TYPE" => "A",
-		"LESSON_ID" => $arResult['VARIABLES']['LESSON_ID'],
-		"PROGRAM_CODE" => $arResult['VARIABLES']['ELEMENT_CODE'],
-		"USER_ID" => $GLOBALS['USER']->getId(),
+		'CACHE_TIME' => '3600000',
+		'CACHE_TYPE' => 'N',
+		'LESSON_ID' => $arResult['VARIABLES']['LESSON_ID'],
+		'PROGRAM_CODE' => $arResult['VARIABLES']['ELEMENT_CODE'],
+		'USER_ID' => $GLOBALS['USER']->getId(),
+		'PJAX_LINK' => $arParams['PJAX_LINK']
 	)
 );?>

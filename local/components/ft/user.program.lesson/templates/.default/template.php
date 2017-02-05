@@ -77,6 +77,6 @@
 		</div>
 	<?endif;?>
 	
-	<a href="<?=$arResult['PROGRAM']['DETAIL_PAGE_URL']?>" data-pjax="">Вернуться к программе &laquo;<?=$arResult['PROGRAM']['NAME']?>&raquo;</a>
+	<a href="<?=$arResult['PROGRAM']['DETAIL_PAGE_URL']?>" data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>">Вернуться к программе &laquo;<?=$arResult['PROGRAM']['NAME']?>&raquo;</a>
 	
 </article>

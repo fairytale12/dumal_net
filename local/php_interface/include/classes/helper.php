@@ -279,6 +279,16 @@ class CHelper {
 	public static function getDomain($siteID = false) {
 		return 'http://' . self::getHostname($siteID);
 	}
+	
+	public static function getLinkId($link) {
+		
+		$link = trim($link);
+		if(empty($link)) {
+			return false;
+		}
+		
+		return md5($link);
+	}
 }
 
 ?>

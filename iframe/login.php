@@ -1,4 +1,6 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");?>
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+$GLOBALS['APPLICATION']->setTitle('Авторизация');
+?>
    
 <?$APPLICATION->IncludeComponent(
 	"ft:user.authorize",

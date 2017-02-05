@@ -35,14 +35,13 @@ class CMainHandlers {
 		
 		if($arFields['EXTERNAL_AUTH_ID'] == 'socservices') {
 			
-			
 			if(!empty($arFields['EMAIL'])) {
 				
 				$arFields['UF_SOC_EMAIL'] = $arFields['EMAIL'];				
 				
 			}
 			
-			$arFields['EMAIL'] = 'temp_' . randString(7) . '_' . time() . '@temp.ru';
+			$arFields['EMAIL'] = 'temp_' . randString(7) . '_' . microtime(true) . '@temp.ru';
 			$arFields['LOGIN'] = $arFields['EMAIL'];
 			$arFields['ACTIVE'] = 'N';
 			$arFields['UF_NEED_CONFIRM'] = 1;

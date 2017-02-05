@@ -31,6 +31,12 @@ class pjax {
 		
 		$query = \phpQuery::newDocumentHTML($buffer);
 		$responseTitle = $query->find('head > title');
+		/*$responseOgUrl = $query->find('head > meta[property="og:url"]');
+		$responseOgType = $query->find('head > meta[property="og:type"]');
+		$responseOgTitle = $query->find('head > meta[property="og:title"]');
+		$responseOgDescription = $query->find('head > meta[property="og:description"]');
+		$responseOgImage = $query->find('head > meta[property="og:image"]');
+		$responseOgVideo = $query->find('head > meta[property="og:video"]');*/
 		$responseContainer = $query->find($this->getPjaxContainer());
 		
 		if ($responseContainer->count()) {

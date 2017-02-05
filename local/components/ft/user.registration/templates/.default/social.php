@@ -1,4 +1,23 @@
 <?if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();?>
+
+<?if($arResult['NEED_TO_REDIRECT']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		parent.window.location.href = '<?=$arResult['NEED_TO_REDIRECT']?>';
+	</script>
+<?endif;?>
+<?if($arResult['NEED_TO_IFRAME']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		
+		<?if($arResult['USER_EXIST'] && $arParams['STEP'] == 2):?>
+			parent.ftHelper.showForm('/iframe/social_registartion_user_exist.php', true, {email: '<?=$arResult['SERVICE_USER']['UF_SOC_EMAIL']?>'});
+		<?else:?>
+			parent.ftHelper.showForm('<?=$arResult['NEED_TO_IFRAME']?>');
+		<?endif;?>
+	</script>
+<?endif;?>
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="alert alert-warning alert-dismissable">
@@ -9,13 +28,9 @@
 </div>
 
 <?if(!empty($arResult['ERRORS'])):?>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-danger">
-				<?=implode("<br/>", $arResult['ERRORS'])?>
-			</div>
-		</div>
-	</div>
+	<script type="text/javascript">
+		parent.ftHelper.addNotify('<?=implode("<br/>", $arResult['ERRORS'])?>', 'danger', 6000);
+	</script>
 <?endif;?>
 <form method="post" action="">
 	<div class="row">
@@ -45,25 +60,10 @@
 	<div class="row">
 		<div class="form-group">
 			<div class="col-md-12">
-				<input type="hidden" name="CAPTCHA_CODE" value="">
+				<input type="hidden" name="FORM_CHECK_INPUT" value="<?=$arResult['POST']['FORM_CHECK_INPUT']?>">
 				<input type="submit" class="btn btn-block btn-warning" name="social_registration" value="Зарегистрироваться">
 			</div>
 		</div>
 	</div>
 		
 </form>
-<?if($_REQUEST['result'] == 'confirm'):?>
-	<script type="text/javascript">
-		parent.ftHelper.showModal('#registration-user-confirm');
-	</script>
-<?endif;?>
-<?if($arResult['USER_EXIST'] && $arParams['STEP'] == 2):?>
-	<script type="text/javascript">
-		var agreeLink = parent.$('#social-registartion-user-exist').find('a.agree-link');
-		if(agreeLink.length) {
-			var newOnClickEvent = agreeLink.attr('onclick').replace(/#EMAIL#/, '<?=$arResult['SERVICE_USER']['UF_SOC_EMAIL']?>');
-			agreeLink.attr('onclick', newOnClickEvent);
-		}
-		parent.ftHelper.showModal('#social-registartion-user-exist');
-	</script>
-<?endif;?>

@@ -7,15 +7,14 @@ $arParams['STEP'] = intval($arParams['STEP']);
 
 $arResult = array();
 
+$arResult['NEED_TO_REDIRECT'] = false;
+$arResult['NEED_TO_IFRAME'] = false;
+
 $arSession = ft\CHelper::getSession();
 
 if(!empty($arSession['SOC_USER_ID'])) {
 	$arResult['CURRENT_USER_ID'] = $arSession['SOC_USER_ID'];
-}/* elseif($GLOBALS['USER']->getId()) {
-	// При регистрации через соц. сервисы, пользователь авторизуется.
-	// получаем ID авторизованного пользователя
-	$arResult['CURRENT_USER_ID'] = intval($GLOBALS['USER']->getId());
-}*/
+}
 $arResult['SERVICE_USER'] = array();
 if(!empty($arResult['CURRENT_USER_ID'])) {
 	if($arCurrentUser = \CUser::getList(($by = 'ID'), ($order = 'ASC'), 
@@ -40,7 +39,7 @@ if(!empty($arResult['CURRENT_USER_ID'])) {
 if($GLOBALS['USER']->IsAuthorized()) {
 	
 	// Авторизованный пользователь
-	echo 'Вы уже авторизованы';
+	$this->IncludeComponentTemplate();
 	
 } elseif(!empty($arResult['SERVICE_USER']) && $arParams['STEP'] >= 2) {
 	
@@ -79,12 +78,14 @@ if($GLOBALS['USER']->IsAuthorized()) {
 
 			
 			if($arUserFields['ACTIVE'] == 'N') {
-				
 				ft\CUserRegistration::sendEmailConfirm($arEventFields);
-				
+				$arResult['NEED_TO_IFRAME'] = '/iframe/registration_user_confirm.php';
+
+			} elseif($arUserFields['ACTIVE'] == 'Y') {
+				$GLOBALS['USER']->Authorize($arResult['SERVICE_USER']['ID']);
+				$arResult['NEED_TO_REDIRECT'] = '/account/';
 			}
 			ft\CHelper::clearSession();
-			LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('result=confirm', array('result')));
 			
 		}
 		
@@ -106,7 +107,12 @@ if($GLOBALS['USER']->IsAuthorized()) {
 			// Если найден пользователь с таким email -> уведомляем об этом пользователя
 			$arResult['USER_EXIST'] = $arEmailValidation['USER_ID'];
 		}
+		
+		if($arResult['USER_EXIST'] && $arParams['STEP'] == 2) {
+			$arResult['NEED_TO_IFRAME'] = '/iframe/social_registartion_user_exist.php';
+		}
 	}
+	
 	
 	$this->IncludeComponentTemplate('social');	
 	
@@ -174,12 +180,11 @@ if($GLOBALS['USER']->IsAuthorized()) {
 			$bOk = true;
 
 			$events = GetModuleEvents("main", "OnBeforeUserRegister", true);
-			foreach($events as $arEvent)
-			{
-				if(ExecuteModuleEventEx($arEvent, array(&$arResult['VALUES'])) === false)
-				{
-					if($err = $APPLICATION->GetException())
+			foreach($events as $arEvent) {
+				if(ExecuteModuleEventEx($arEvent, array(&$arResult['VALUES'])) === false) {
+					if($err = $APPLICATION->GetException()) {
 						$arResult['ERRORS'][] = $err->GetString();
+					}
 
 					$bOk = false;
 					break;
@@ -188,13 +193,11 @@ if($GLOBALS['USER']->IsAuthorized()) {
 
 			$ID = 0;
 			$user = new \CUser();
-			if ($bOk)
-			{
-				$ID = $user->Add($arResult["VALUES"]);
+			if ($bOk) {
+				$ID = $user->Add($arResult['VALUES']);
 			}
 
-			if (intval($ID) > 0)
-			{
+			if (intval($ID) > 0) {
 				$register_done = true;
 
 				$arResult['VALUES']["USER_ID"] = $ID;
@@ -203,19 +206,19 @@ if($GLOBALS['USER']->IsAuthorized()) {
 				unset($arEventFields["PASSWORD"]);
 				unset($arEventFields["CONFIRM_PASSWORD"]);
 
-				//$event = new CEvent;
-				//$event->SendImmediate("NEW_USER", SITE_ID, $arEventFields);
 				if($arResult['VALUES']['ACTIVE'] == 'N') {
 					
 					ft\CUserRegistration::sendEmailConfirm($arEventFields);
+					$arResult['NEED_TO_IFRAME'] = '/iframe/registration_user_confirm.php';
 					
+				} elseif($arResult['VALUES']['ACTIVE'] == 'Y') {
+					$GLOBALS['USER']->Authorize($ID);
+					$arResult['NEED_TO_REDIRECT'] = '/account/';
 				}
-				LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('result=confirm', array('result')));
-			}
-			else
-			{
+				
+			} else {
+				
 				$error = $user->LAST_ERROR;			
-				//$error = preg_replace('/Пользователь с логином \"([^\"]+)\" уже существует\./iu', '', $error);
 				
 				$arResult["ERRORS"][] = $error;
 			}

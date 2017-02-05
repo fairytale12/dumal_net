@@ -65,6 +65,7 @@ $this->setFrameMode(true);
 		"CHECK_DATES" => $arParams["CHECK_DATES"],
 		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N'),
 		'PILOT_PROGRAMS' => $arParams['PILOT_PROGRAMS'],
+		'PJAX_LINK' => $arParams['PJAX_LINK']
 	),
 	$component
 );?>

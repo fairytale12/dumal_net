@@ -14,11 +14,20 @@
 		</div>
 		*/?>
 		
+		<?itc\CUncachedArea::show('progress-block')?>
+		
+		<?itc\CUncachedArea::show('vk-comments-block')?>
+		
 		<?itc\CUncachedArea::show('article-author-block')?>
 		
 		<?itc\CUncachedArea::show('categories-block')?>
 		
 		<?itc\CUncachedArea::show('subscribe-form-block')?>
+		
+		<?itc\CUncachedArea::show('review-block')?>
+		
+		
+		<?$GLOBALS['APPLICATION']->includeFile('/include/feedback_block.php')?>
 		
 		<?/*
 		<div class="widget categorywidget">

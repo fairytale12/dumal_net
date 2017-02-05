@@ -27,7 +27,7 @@ if($arParams['IS_AJAX']) {
 		
 		<article id="<?=$this->GetEditAreaId($arItem['ID']);?>" class="news-block big-block">
 			<?if(!empty($arItem['PREVIEW_PICTURE'])):?>
-				<a data-pjax="" href="<?=$arItem['DETAIL_PAGE_URL']?>" class="overlay-link" title="<?=$arItem['NAME']?>">
+				<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arItem['DETAIL_PAGE_URL']?>" class="overlay-link" title="<?=$arItem['NAME']?>">
 					<figure class="image-overlay">
 						<img src="<?=ft\CTPic::resizeImage($arItem['PREVIEW_PICTURE']['ID'], 'crop', 730, 480)?>" alt="<?=$arItem['NAME']?>" title="<?=$arItem['NAME']?>">
 					</figure>
@@ -38,7 +38,7 @@ if($arParams['IS_AJAX']) {
 			<?endif;?>
 			<div class="news-details">
 				<h3 class="news-title">
-					<a data-pjax="" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>">
+					<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arItem['DETAIL_PAGE_URL']?>" title="<?=$arItem['NAME']?>">
 						<?=$arItem['NAME']?>
 					</a>
 				</h3>

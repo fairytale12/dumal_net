@@ -1,6 +1,7 @@
 <?
 use Bitrix\Main\Loader;
 use Bitrix\Main\UserTable;
+Loader::includeModule('iblock');
 $arResult['AUTHOR'] = false;
 if(!empty($arResult['PROPERTIES']['AUTHOR_ID']['VALUE'])) {
 	$arResult['AUTHOR'] = UserTable::getList(array(
@@ -10,9 +11,28 @@ if(!empty($arResult['PROPERTIES']['AUTHOR_ID']['VALUE'])) {
 	$arResult['AUTHOR']['FIO'] = ft\CHelper::getFio($arResult['AUTHOR']);
 }
 
+$arResult['PROGRAM'] = false;
+if(!empty($arResult['PROPERTIES']['PROGRAM']['VALUE'])) {
+	
+	$arSort = array();
+	
+	$arFilter = array(
+		'IBLOCK_ID' => PROGRAM_IBLOCK_ID, 
+		'ACTIVE' => 'Y', 
+		'ID' => $arResult['PROPERTIES']['PROGRAM']['VALUE']
+	);
+	
+	$arSelect = array(
+		'ID',
+		'NAME',
+		'DETAIL_PAGE_URL',
+	);
+	
+	$arResult['PROGRAM'] = \CIBlockElement::getList($arSort, $arFilter, false, false, $arSelect)->getNext();
+}
+
 if(!empty($arResult['ID'])) {
 	
-	Loader::includeModule('iblock');
 	$arSort = array(
 		$arParams['SORT_BY1'] => $arParams['SORT_ORDER1'], 
 		$arParams['SORT_BY2'] => $arParams['SORT_ORDER2']
@@ -45,5 +65,7 @@ if(!empty($arResult['ID'])) {
 	}
 
 }
-$this->__component->SetResultCacheKeys(array('AUTHOR'));
+
+$arResult['ADD_CHAT'] = $arResult['PROPERTIES']['ADD_CHAT']['VALUE'];
+$this->__component->SetResultCacheKeys(array('AUTHOR', 'ADD_CHAT'));
 ?>

@@ -12,6 +12,12 @@ if(!empty($arResult['AUTHOR'])):
 	<?itc\CUncachedArea::endCapture();?>
 <?endif;?>
 
+<?if($arResult['ADD_CHAT']):?>
+	<?itc\CUncachedArea::startCapture('vk-comments-block');?>
+		<div id="vk-comments" data-id="video-<?=$arResult['ID']?>"></div>
+	<?itc\CUncachedArea::endCapture();?>
+<?endif;?>
+
 <?itc\CUncachedArea::startCapture('subscribe-form-block');?>
 	<?$APPLICATION->IncludeComponent(
 		"ft:user.subscribe.form",

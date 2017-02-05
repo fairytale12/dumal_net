@@ -67,6 +67,7 @@ $this->setFrameMode(true);
 		"SORT_ORDER1" => $arParams["SORT_ORDER1"],
 		"SORT_BY2" => $arParams["SORT_BY2"],
 		"SORT_ORDER2" => $arParams["SORT_ORDER2"],
+		'PJAX_LINK' => $arParams['PJAX_LINK']
 	),
 	$component
 );?>

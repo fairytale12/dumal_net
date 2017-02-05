@@ -1,6 +1,7 @@
 var ftHelper = function() {};
 
 ftHelper.isAjaxBusy = false;
+ftHelper.pingerTimeout;
 
 ftHelper.showPreloader = function() {
 	if(!$('#site-preloader').length) {
@@ -20,10 +21,21 @@ ftHelper.hidePreloader = function() {
 	return true;
 }
 
+ftHelper.showButtonPreloader = function(_this) {
+	$(_this).addClass('button-loading');
+	return false;
+}
+
+ftHelper.hideButtonPreloader = function(_this) {
+	$(_this).removeClass('button-loading').blur();
+	return false;
+}
+
 ftHelper.destroy = function() {
 	
 	// iCheck
 	$('input[type="checkbox"]').iCheck('destroy');
+	$('.done-task-block input[type="checkbox"]').unbind('ifChecked');
 }
 
 ftHelper.init = function() {
@@ -35,10 +47,14 @@ ftHelper.init = function() {
 		increaseArea: '20%' // optional
 	});
 	
-	$('.done-task-block input[type="checkbox"]').on('ifChecked', function(event){
+	$('.done-task-block input[type="checkbox"]').unbind('ifChecked').bind('ifChecked', function(event){
 		// Задание выполнено
 		ftUserLesson.lessonComplete(this);
 	});
+	
+	if($('#vk-comments').length) {
+		VK.Widgets.Comments('vk-comments', {limit: 10, attach: false, autoPublish: 0}, $('#vk-comments').data('id'));
+	}
 	
 }
 
@@ -80,11 +96,13 @@ ftHelper.showIframe = function(href, closeBtn) {
 		closeBtn: closeBtn,
 		href: href,
 		type: 'iframe',
-		width: 300,
+		//width: 400,
+		maxWidth: 280,
+		fitToView: false,
 		padding: 0,
-		scrolling: 'auto',
+		scrolling: 'no',
 		iframe: {
-			scrolling: 'auto'
+			scrolling: 'no'
 		},
 		helpers : {
 			overlay : {
@@ -119,6 +137,7 @@ ftHelper.showIframe = function(href, closeBtn) {
 	return false;
 }
 
+
 ftHelper.closeModal = function() {
 	$.fancybox.close();
 	// var magnificPopup = $.magnificPopup.instance;
@@ -127,22 +146,52 @@ ftHelper.closeModal = function() {
 }
 
 
-ftHelper.showLoginForm = function(closeBtn, email) {
-	if(email == undefined) {
-		email = '';
-	} else {
-		email = '?email=' + email;
+ftHelper.showLoginForm = function(closeBtn, params) {
+	
+	var url = '/iframe/login.php';
+	
+	if(params != undefined && typeof(params) == 'object') {
+		url = url + '?' + $.param(params);
 	}
 	
-	return ftHelper.showIframe('/iframe/login.php' + email, closeBtn);
+	return ftHelper.showIframe(url, closeBtn);
 }
 
-ftHelper.showRegistration = function(closeBtn, step) {
-	if(step == undefined) {
-		step = 1;
+ftHelper.showRegistrationForm = function(closeBtn, params) {
+	
+	var url = '/iframe/registration.php';
+	
+	if(params != undefined && typeof(params) == 'object') {
+		url = url + '?' + $.param(params);
 	}
-	return ftHelper.showIframe('/iframe/registration.php?step=' + step, closeBtn);
+	
+	return ftHelper.showIframe(url, closeBtn);
 }
+
+ftHelper.showForgotForm = function(closeBtn, params) {
+	
+	var url = '/iframe/forgot.php';
+	
+	if(params != undefined && typeof(params) == 'object') {
+		url = url + '?' + $.param(params);
+	}
+	
+	return ftHelper.showIframe(url, closeBtn);
+}
+
+ftHelper.showForm = function(url, closeBtn, params) {
+	
+	if(url == undefined || url == '') {
+		return false;
+	}
+	
+	if(params != undefined && typeof(params) == 'object') {
+		url = url + '?' + $.param(params);
+	}
+	
+	return ftHelper.showIframe(url, closeBtn);
+}
+
 
 ftHelper.ajaxPager = function(_this) {
 	
@@ -220,9 +269,11 @@ ftHelper.addNotify = function(text, type, duration) {
 		var block = '<div class="alert alert-' + type + '">' +
 					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + text + '</div>';
 
-		$('#notifies-block').prepend(block);
+		//$('#notifies-block').prepend(block);
+		$('#notifies-block').append(block);
 		
-		var thisBlock = $('#notifies-block .alert:first');
+		//var thisBlock = $('#notifies-block .alert:first');
+		var thisBlock = $('#notifies-block .alert:last');
 		
 		setTimeout(
 			function() {
@@ -238,27 +289,57 @@ ftHelper.addNotify = function(text, type, duration) {
 	}
 }
 
+ftHelper.pinger = function() {
+	console.log('pinger');
+	clearTimeout(ftHelper.pingerTimeout);
+	ftHelper.pingerTimeout = setTimeout(
+		function() {
+			$.post('/ajax/pinger.php', function(data) {
+				console.log('ajax pinger');
+			});
+			ftHelper.pinger();
+		},
+		840000 // every 14 minutes
+	);
+}
 
 $(document).pjax('a[data-pjax]', '#pjax-container', {
-	scrollTo: false
+	scrollTo: false,
+	timeout: 0
 })
 
 $(document).bind('pjax:click', function(options) {
+	
+	if(ftHelper.isAjaxBusy) {
+		return false;
+	}
+	
+	ftHelper.isAjaxBusy = true;
+	
 	//console.log(options.target);
 	//console.log('click');
 	$('.mega-menu li').removeClass('active');
+	/*
 	if($(options.target).closest('.mega-menu')) {
 		$(options.target).parents('li').addClass('active');
 	}
+	*/
+	
+	if($(options.target).data('pjax')) {
+		$('.mega-menu').find('a[data-pjax="' + $(options.target).data('pjax') + '"]').parents('li').addClass('active');
+	}
+	
 	//console.log($(options.target));
 	
 	if($(options.target).closest('#mobile-nav')) {
 		$('#mobile-nav').data('mmenu').close();
 	}
 });
+
 $('#pjax-container').bind('pjax:start', function(xhr, options) {
-	ftHelper.showPreloader();
-	
+	//ftHelper.showPreloader();
+	Pace.start();
+	ftHelper.pinger();
 	$('html, body').animate({scrollTop : 0}, 500, 'linear');
 });
 
@@ -269,7 +350,6 @@ $('#pjax-container').bind('pjax:beforeReplace', function(contents, options) {
 
 
 $('#pjax-container').bind('pjax:complete', function(xhr, textStatus, options) {
-	ftHelper.hidePreloader();
 	
 	console.log('ftHelper.init');
 	ftHelper.init();
@@ -281,5 +361,10 @@ $('#pjax-container').bind('pjax:complete', function(xhr, textStatus, options) {
 		Ya.share2($(this).attr('id'));
 	});
 	*/
+});
+
+$('#pjax-container').bind('pjax:end', function(xhr, options) {
+	//ftHelper.hidePreloader();
 	
+	ftHelper.isAjaxBusy = false;
 });

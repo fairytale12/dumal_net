@@ -2,16 +2,27 @@
 <!doctype html>
 <html>
 	<head>
-		<meta charset="utf-8">
+	
 		<title><?$APPLICATION->ShowTitle();?></title>
 		<meta class="viewport" name="viewport" content="width=device-width, initial-scale=1.0">
-		
 		<meta name="google-site-verification" content="orTfP-fmP9E8CUpe0vMzVJtOuwuSbnWjaS4ztDRH8YY" />
 		
 		<!--<script src="https://apis.google.com/js/platform.js"></script>-->
 		<?/*<script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>*/?>
 		
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+		
+		<script type="text/javascript">
+			paceOptions = {
+				ajax: true,
+				document: true,
+				eventLag: true,
+				startOnPageLoad: true,
+				restartOnPushState: false,
+				restartOnRequestAfter: true
+			};
+		</script>
+		
 		<?$APPLICATION->ShowHead();?>
 		<!-- Favicon -->
 		<?/*
@@ -37,7 +48,6 @@
 		<link href="http://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic" rel="stylesheet" type="text/css">
 		<link href="http://fonts.googleapis.com/css?family=Raleway:900" rel="stylesheet" type="text/css">
 		
-
 		<!-- Icon Font -->
 		<?Asset::getInstance()->addCss('/plugins/font-awesome/css/font-awesome.min.css');?>
 
@@ -48,6 +58,7 @@
 		<?Asset::getInstance()->addCss('/css/style.css');?>
 		<?Asset::getInstance()->addCss('/css/fancybox/jquery.fancybox.css');?>
 		<?Asset::getInstance()->addCss('/css/icheck/minimal/minimal.css');?>
+		<?Asset::getInstance()->addCss('/css/pace.css');?>
 		<?Asset::getInstance()->addCss('/css/dev.css');?>
 		
 		<?Asset::getInstance()->addJs('/js/jquery-1.11.2.min.js');?>
@@ -57,6 +68,7 @@
 		<?Asset::getInstance()->addJs('/js/jquery.fancybox.pack.js');?>
 		<?Asset::getInstance()->addJs('/js/icheck.min.js');?>
 		<?Asset::getInstance()->addJs('/js/plugins.js');?>
+		<?Asset::getInstance()->addJs('/js/pace.min.js');?>
 		<?Asset::getInstance()->addJs('/js/script.js');?>
 		
 		<?Asset::getInstance()->addJs('/js/classes/helper.js');?>
@@ -77,6 +89,7 @@
 	</head>
 	<body>
 		<?$APPLICATION->ShowPanel();?>
+		<div id="site-preloader"></div>
 		<div id="main" class="header-style1">
   
 			<header class="header-wrapper clearfix">
@@ -96,7 +109,7 @@
 
 									<!-- Main Nav Wrapper -->
 									<nav class="navbar mega-menu">
-										<a class="logo" href="/" title="Думал, нет?" rel="home" data-pjax="">
+										<a class="logo" href="/" title="Думал, нет?" rel="home" data-pjax="<?=ft\CHelper::getLinkId('/')?>">
 											Думал, <span>Нет?</span>
 										</a><!-- .logo -->
 										
@@ -137,7 +150,7 @@
 												<?if(!$GLOBALS['USER']->isAuthorized()):?>
 												
 													<a href="javascript:void(0);" onclick="return ftHelper.showLoginForm();">Войти</a>
-													<a href="javascript:void(0);" onclick="return ftHelper.showRegistration();">Регистрация</a>
+													<a href="javascript:void(0);" onclick="return ftHelper.showRegistrationForm();">Регистрация</a>
 													
 												<?endif;?>
 												<?/*

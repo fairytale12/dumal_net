@@ -1,6 +1,10 @@
 <?if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();?>
 <?if($arResult['LOGIN_SUCCESS'] || $GLOBALS['USER']->IsAuthorized()):?>
 	<script type="text/javascript">
+		<?/*if($arResult['LOGIN_SUCCESS']):?>
+			parent.ftHelper.addNotify('Доброго времени суток!', 'success', 6000);
+		<?endif;*/?>
+		
 		parent.ftHelper.closeModal();
 		
 		if(parent.window.location.href.match(/\/account/i)) {
@@ -10,6 +14,24 @@
 		}
 	</script>
 <?endif;?>
+<?if($arResult['NEED_TO_REDIRECT']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		parent.window.location.href = '<?=$arResult['NEED_TO_REDIRECT']?>';
+	</script>
+<?endif;?>
+<?if($arResult['NEED_TO_IFRAME']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		parent.ftHelper.showForm('<?=$arResult['NEED_TO_IFRAME']?>');
+	</script>
+<?endif;?>
+<?if($_REQUEST['error'] == 'nf'):?>
+	<script type="text/javascript">
+		parent.ftHelper.showForm('/iframe/login_user_not_found.php');
+	</script>
+<?endif;?>
+
 <div class="row">
 	<div class="col-md-12">
 		<form method="post" action=""  class="reg-form">
@@ -17,20 +39,12 @@
 			<div class="row">
 				<div class="col-md-12">
 					<?if(!empty($arResult['ERRORS'])):?>
-						<div class="alert alert-danger">
-							<?=implode("<br/>", $arResult['ERRORS'])?>
-						</div>
+						<script type="text/javascript">
+							parent.ftHelper.addNotify('<?=implode("<br/>", $arResult['ERRORS'])?>', 'danger', 6000);
+						</script>
 					<?endif;?>
 				</div>
 			</div>
-			<?/*if($_REQUEST['error'] == 'nf'):?>
-				<div class="row">
-					<div class="col-md-12">
-						<p>Пользователь с таким профилем не найден на сайте. Перейти к регистрации?</p>
-						<a href="/reg/">Да</a> / <a href="javascript: void(0);" onclick="return ftHelper.closeModal();">Отмена</a>
-					</div>
-				</div>
-			<?endif;*/?>
 			
 			<div class="row">
 				<div class="col-md-12<?=(!empty($arResult['ERRORS']['EMAIL']) ? ' has-error' : '')?>">
@@ -79,23 +93,18 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
-						<input type="hidden" name="CAPTCHA_CODE" value="">
+						<input type="hidden" name="FORM_CHECK_INPUT" value="<?=$arResult['POST']['FORM_CHECK_INPUT']?>">
 						<input type="submit" class="btn btn-block btn-warning" name="login" value="Войти">
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<a href="javascript:void(0);" onclick="return parent.ftHelper.showIframe('/iframe/forgot.php');">Забыли пароль</a> 
-					<a href="javascript:void(0);" class="text-right" onclick="return parent.ftHelper.showRegistration();">Регистрация</a>
+					<a href="javascript:void(0);" onclick="return parent.ftHelper.showForgotForm();">Забыли пароль</a> 
+					<a href="javascript:void(0);" class="text-right" onclick="return parent.ftHelper.showRegistrationForm();">Регистрация</a>
 				</div>
 			</div>
 
 		</form>
 	</div>
 </div>
-<?if($_REQUEST['error'] == 'nf'):?>
-	<script type="text/javascript">
-		parent.ftHelper.showModal('#login-user-not-found');
-	</script>
-<?endif;?>

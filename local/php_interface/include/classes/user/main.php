@@ -166,7 +166,10 @@ class CUser extends \CUser {
 						elseif($arUser["CONFIRM_CODE"] <> '')
 						{
 							//unconfirmed registration
-							$message = GetMessage("MAIN_LOGIN_EMAIL_CONFIRM", array("#EMAIL#" => $arUser["EMAIL"]));
+							
+							
+							//$message = GetMessage("MAIN_LOGIN_EMAIL_CONFIRM", array("#EMAIL#" => $arUser["EMAIL"]));
+							$message = str_replace(array("#EMAIL#"), array($arUser["EMAIL"]), UNCONFIRMED_USER_MESSAGE);
 							$APPLICATION->ThrowException($message);
 							$result_message = array("MESSAGE"=>$message."<br>", "TYPE"=>"ERROR");
 						}
@@ -644,12 +647,12 @@ class CUser extends \CUser {
 			return CHelper::returnAnswer(-3, 'Неправильный e-mail');
 		}
 		
-		$arResult = CUserValidation::checkEmail($email, true);
+		$arResult = CUserValidation::checkEmail($email, true, false, true);
 		if($arResult['CODE'] <= 0 && $arResult['CODE'] != -3) {
 			return CHelper::returnAnswer(-4, $arResult['TEXT']);
 		}
-		
-		if($arResult['CODE'] != -3) {
+		//return CHelper::returnAnswer($arResult['CODE'], $arResult['TEXT']);
+		if($arResult['CODE'] == -3) {
 			// Пользователь с таким email найден
 			
 			// Проверяем наличие программы
@@ -667,8 +670,19 @@ class CUser extends \CUser {
 			// то отсылаем ему код подтверждения
 			$confirmCode = self::changeConfirmCode($arResult['USER_ID']);
 			$arUser = self::getUser($arResult['USER_ID']);
+			$arUser['USER_ID'] = $arResult['USER_ID'];
+			//CUserRegistration::sendEmailConfirm($arUser, '&pilot=1&program=' . $programId);
 			
-			CUserRegistration::sendEmailConfirm($arUser, '&pilot=1&program=' . $programId);
+			// Письмо для привязки пробной программы
+			$event = new \CEvent;
+			$arEventFields = array(
+				'TITLE' => 'Получение пробной программы',
+				'EVENT_TEXT' => 'Для получения пробной программы',
+				'CONFIRM_LINK' => 'http://' . $_SERVER['HTTP_HOST'] . '/confirm/?confirm_user_id=' . $arUser['USER_ID'] . '&confirm_code=' . $arUser['CONFIRM_CODE'] . '&pilot=1&program=' . $programId
+			);
+			
+			$event->SendImmediate('FT_CONFIRM_CODE', SITE_ID, array_merge($arUser, $arEventFields));
+			
 			return CHelper::returnAnswer(1, 'Вам на почту отправлена ссылка для подтвеждения');
 			
 		} else {
@@ -682,9 +696,11 @@ class CUser extends \CUser {
 			$arFields = CUserRegistration::prepareFields($arFields, true);
 			$user = new \CUser();
 			if(!$userId = $user->add($arFields)) {
-				return CHelper::returnAnswer(-5, 'Возникла ошибка при добавлении пользователя, пвторите чуть позже.');
+				return CHelper::returnAnswer(-5, 'Возникла ошибка при добавлении пользователя, повторите чуть позже.');
 			}
+			$arFields['USER_ID'] = $userId;
 			
+			// Письмо для подтверждения регистрации
 			CUserRegistration::sendEmailConfirm($arFields, '&pilot=1&program=' . $programId);
 			return CHelper::returnAnswer(1, 'Вам на почту отправлена ссылка для подтвеждения');
 		}

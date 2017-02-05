@@ -4,6 +4,7 @@
 		<form method="post" action="">
 			<h2>Ввод нового пароля</h2>
 			<?if(!empty($arResult['ERRORS'])):?>
+				<?/*
 				<div class="row">
 					<div class="col-md-12">
 						<div class="alert alert-danger">
@@ -11,6 +12,10 @@
 						</div>
 					</div>
 				</div>
+				*/?>
+				<script type="text/javascript">
+					parent.ftHelper.addNotify('<?=implode("<br/>", $arResult['ERRORS'])?>', 'danger', 6000);
+				</script>
 			<?endif;?>
 			<div class="row">
 				<div class="col-md-12<?=(!empty($arResult['ERRORS']['PASSWORD']) ? ' has-error' : '')?>">
@@ -31,7 +36,7 @@
 				<div class="col-md-12">
 					<input type="hidden" name="USER_CHECKWORD" value="<?=$arResult['POST']['USER_CHECKWORD']?>">
 					<input type="hidden" name="LOGIN" value="<?=$arResult['POST']['LOGIN']?>">
-					<input type="hidden" name="CAPTCHA_CODE" value="">
+					<input type="hidden" name="FORM_CHECK_INPUT" value="<?=$arResult['POST']['FORM_CHECK_INPUT']?>">
 					<input type="submit" class="btn btn-block btn-warning" name="change_password" value="Войти">
 				</div>
 			</div>

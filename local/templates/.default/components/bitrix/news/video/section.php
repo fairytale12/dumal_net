@@ -67,7 +67,8 @@ $this->setFrameMode(true);
 		"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["detail"],
 		"SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
 		"IBLOCK_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["news"],
-		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N')
+		'IS_AJAX' => ($_REQUEST['ftAjaxPager'] == 'Y' ? 'Y' : 'N'),
+		'PJAX_LINK' => $arParams['PJAX_LINK']
 	),
 	$component
 );?>

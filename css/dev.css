@@ -1,3 +1,15 @@
+#site-preloader {
+	width: 100%; 
+	height: 100%; 
+	opacity: 0.5; 
+	position: fixed; 
+	left:0; 
+	top: 0; 
+	background: url(/images/site-preloader.gif) no-repeat 49% 50% #000; 
+	z-index: 2000; 
+	display: none;
+}
+
 .mega-menu li.menu-color1 a:hover,
 .mega-menu li.menu-color1.active a {
 	color:#ff6600;
@@ -24,8 +36,27 @@
 */
 .iframe-body {
 	background-color: #fff;
-	width: 300px;
+	width: 280px;
 	padding: 15px;
+}
+
+.iframe-body h1 {
+	font-size: 28px;
+	text-align: center;
+}
+
+.iframe-body .inline-btn-block {
+	
+}
+
+.iframe-body .inline-btn-block .btn {
+	width: 45%;
+	display: inline-block;
+	margin: 0 10px 0 0;
+}
+
+.iframe-body .inline-btn-block .btn:last-child {
+	margin: 0;
 }
 
 .text-right {
@@ -170,12 +201,12 @@
 #notifies-block {
 	position: fixed;
 	right: 10px;
-	bottom: 0px;
+	top: 10px;
 	width: 300px;
-	z-index: 101;
+	z-index: 9000;
 }
 
-#vk_comments {
+#vk-comments {
 	margin: 0 0 50px 0;
 }
 
@@ -206,6 +237,62 @@
 	color: #ff6600;
 }
 
+.program-pilot-form {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.review-block, .feedback-block {
+	font-size: 36px;
+    font-style: italic;
+    text-align: center;
+    border: 2px solid #dadada;
+    color: #333;
+}
+
+.review-block a, .feedback-block a {
+	padding: 10px 10px;
+	color: #333;
+	display: block;
+}
+
+.button-loading {
+	background: url('/images/ajax-preloader.gif') 50% 50% no-repeat #7a7a7a;
+    line-height: 999px;
+	overflow: hidden;
+}
+
+.btn-default.button-loading:hover, .btn-link.button-loading:hover{
+	transition: none;
+	-webkit-transition: none;
+	-moz-transition: none;
+	background: url('/images/ajax-preloader.gif') 50% 50% no-repeat #646363;
+}
+
+
+#notifies-block .alert {
+	border-radius: 0;
+	border: none;
+	border-left: 6px solid transparent;
+	color: #333;
+	background-color: #fefefe;
+	-webkit-box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow:    0px 3px 2px 0px rgba(0, 0, 0, 0.05);
+	box-shadow:         0px 3px 2px 0px rgba(0, 0, 0, 0.05);
+}
+
+#notifies-block .alert-warning{
+	border-left-color: #F6BB42;
+}
+
+#notifies-block .alert-danger{
+	border-left-color: #E9573F;
+}
+
+#notifies-block .alert-success{
+	border-left-color: #8CC152;
+}
+
 @media (max-width: 1199px) {
 	.header-right {
 		right: 10px;
@@ -223,9 +310,25 @@
 	.header-right .header-phone-block {
 		font-size: 13px;
 		margin: 17px 0 0 0;
+		color: #333;
 	}
 	
 	.header-right {
 		right: 0px;
 	}
+	
+}
+
+@media (max-width: 400px) {
+	
+	.header-right .header-phone-block {
+		font-size: 13px;
+		margin: 17px 0 0 0;
+		color: #333;
+	}
+	
+	.logo {
+		font-size: 16px;
+	}
+	
 }

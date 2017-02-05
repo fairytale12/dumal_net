@@ -109,8 +109,9 @@ class CSocServAuthManager extends \CSocServAuthManager {
 		$url = $GLOBALS["APPLICATION"]->GetCurPageParam('error=' . $type, array('error'));
 		?>
 		<script type="text/javascript">
-			if(window.opener)
+			if(window.opener) {
 				window.opener.location = '<?=\CUtil::JSEscape($url)?>';
+			}
 			window.close();
 		</script>
 		<?
@@ -121,7 +122,7 @@ class CSocServAuthManager extends \CSocServAuthManager {
 		?>
 		<script type="text/javascript">
 			if(window.opener) {
-				window.opener.parent.ftHelper.showRegistration(<?=($step == 2 ? 'false' : 'true')?>, <?=intval($step)?>);
+				window.opener.parent.ftHelper.showRegistrationForm(<?=($step >= 2 ? 'false' : 'true')?>, {step: <?=intval($step)?>});
 			}
 			window.close();
 		</script>
@@ -152,6 +153,7 @@ class CSocServAuthManager extends \CSocServAuthManager {
 		?>
 		<script type="text/javascript">
 			if(window.opener) {
+				window.opener.parent.ftHelper.closeModal();
 				window.opener.location = '<?=\CUtil::JSEscape($url)?>';
 			}
 			window.close();

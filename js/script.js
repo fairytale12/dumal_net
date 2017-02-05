@@ -31,6 +31,8 @@ $(function () {
 	ftHelper.init();
 	
     $(document).ready( function(){
+		
+		ftHelper.pinger();
 
     	var $_html = $("html");
     	var $_body = $("body");

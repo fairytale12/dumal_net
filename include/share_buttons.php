@@ -6,10 +6,12 @@
 
 <?
 if(!empty($arParams['URL'])) {
-	$arParams['URL'] = 'http://' . $_SERVER['HTTP_HOST'] . $arParams['URL'];
+	$arParams['URL'] = 'http://' . $_SERVER['SERVER_NAME'] . $arParams['URL'];
 }
 if(!empty($arParams['IMG_PATH'])) {
-	$arParams['IMG_PATH'] = 'http://' . $_SERVER['HTTP_HOST'] . $arParams['IMG_PATH'];
+	$arParams['IMG_PATH'] = 'http://' . $_SERVER['SERVER_NAME'] . $arParams['IMG_PATH'];
+} else {
+	//$arParams['IMG_PATH'] = 'http://' . $_SERVER['SERVER_NAME'] . ''
 }
 
 $arParams['DESC'] = explode("\n", $arParams['DESC']);

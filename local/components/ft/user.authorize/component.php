@@ -2,13 +2,12 @@
 if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 
 $arResult = array();
-/*
-if($GLOBALS['USER']->IsAuthorized()) {
-	LocalRedirect('/account/');
-}
-*/
+
 $arResult["~LAST_LOGIN"] = $_COOKIE[\COption::GetOptionString("main", "cookie_name", "BITRIX_SM")."_LOGIN"];
 $arResult["LAST_LOGIN"] = htmlspecialcharsbx($arResult["~LAST_LOGIN"]);
+
+$arResult['NEED_TO_REDIRECT'] = false;
+$arResult['NEED_TO_IFRAME'] = false;
 
 $rsUserTypes = \CUserFieldEnum::GetList(array('SORT' => 'ASC'), array('USER_FIELD_NAME' => 'UF_TYPE'));
 while($arUserType = $rsUserTypes->Fetch()) {

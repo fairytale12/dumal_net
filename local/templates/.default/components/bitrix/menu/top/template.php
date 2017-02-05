@@ -19,12 +19,12 @@
 		<?if ($arItem["IS_PARENT"]):?>
 
 			<?if ($arItem["DEPTH_LEVEL"] == 1):?>
-				<li class="dropdown menu-color1<?=($arItem['SELECTED'] ? ' active' : '')?><?=(!empty($arItem['PARAMS']['CLASS']) ? trim(' ' . $arItem['PARAMS']['CLASS']) : '')?>">
+				<li class="dropdown menu-color1<?=($arItem['SELECTED'] ? ' active' : '')?><?=(!empty($arItem['PARAMS']['CLASS']) ? ' ' . trim($arItem['PARAMS']['CLASS']) : '')?>">
 					<a href="javascript:void(0);" <?/*href="<?=$arItem["LINK"]?>"*/?> class="dropdown-toggle" <?/*data-toggle="dropdown" */?>role="button" aria-expanded="false"><?=$arItem["TEXT"]?></a>
 					<ul class="dropdown-menu">
 			<?else:?>
 				<li class="dropdown-submenu<?=($arItem['SELECTED'] ? ' active' : '')?>">
-					<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
+					<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
 					<ul class="dropdown-menu">
 			<?endif?>
 
@@ -35,12 +35,12 @@
 				<?if ($arItem["DEPTH_LEVEL"] == 1):?>
 				
 					<li class="menu-color1<?=($arItem['SELECTED'] ? ' active' : '')?>">
-						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
+						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
 					</li>
 					
 				<?else:?>
 					<li<?=($arItem['SELECTED'] ? ' class="active"' : '')?>>
-						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax=""' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
+						<a<?=(!$arItem['PARAMS']['NOT_PJAX'] ? ' data-pjax="' . ft\CHelper::getLinkId($arItem["LINK"]) . '"' : '')?> href="<?=$arItem["LINK"]?>"><?=$arItem["TEXT"]?></a>
 					</li>
 				<?endif?>
 

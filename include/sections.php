@@ -4,7 +4,7 @@
 		<ul>
 		<?foreach($arParams['SECTIONS'] as $arSection):?>
 			<li<?=($arSection['SELECTED'] ? ' class="active"' : '')?>>
-				<a data-pjax="" href="<?=$arSection['SECTION_PAGE_URL']?>" title="<?=$arSection['NAME']?>"><?=$arSection['NAME']?></a>
+				<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arSection['SECTION_PAGE_URL']?>" title="<?=$arSection['NAME']?>"><?=$arSection['NAME']?></a>
 			</li>
 		<?endforeach;?>
 		</ul>

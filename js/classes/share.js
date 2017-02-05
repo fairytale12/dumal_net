@@ -7,10 +7,6 @@ ftShare.vkontakte = function(purl, ptitle, pimg, text) {
 	url += '&description=' + encodeURIComponent(text); /* при большом кол-ве текста глючит */
 	url += '&image='       + encodeURIComponent(pimg);
 	url += '&noparse=true';
-	console.log(encodeURIComponent(purl));
-	console.log(encodeURIComponent(ptitle));
-	console.log(encodeURIComponent(text));
-	console.log(encodeURIComponent(pimg));
 	ftShare.popup(url);
 	return false;
 }
@@ -22,13 +18,24 @@ ftShare.odnoklassniki = function(purl, text) {
 	ftShare.popup(url);
 	return false;
 }
-	
+/*
 ftShare.facebook = function(purl, ptitle, pimg, text) {
 	url  = 'http://www.facebook.com/sharer.php?s=100';
 	url += '&p[title]='     + encodeURIComponent(ptitle);
 	url += '&p[summary]='   + encodeURIComponent(text);
 	url += '&p[url]='       + encodeURIComponent(purl);
 	url += '&p[images][0]=' + encodeURIComponent(pimg);
+	ftShare.popup(url);
+	return false;
+}
+*/
+
+ftShare.facebook = function(purl, ptitle, pimg, text) {
+	url  = 'http://www.facebook.com/sharer.php?s=100';
+	url += '&title='     + encodeURIComponent(ptitle);
+	url += '&description='   + encodeURIComponent(text);
+	url += '&u='       + encodeURIComponent(purl);
+	url += '&image=' + encodeURIComponent(pimg);
 	ftShare.popup(url);
 	return false;
 }

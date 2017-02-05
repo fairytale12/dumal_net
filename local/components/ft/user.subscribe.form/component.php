@@ -4,7 +4,7 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 use Bitrix\Main\UserTable;
 
 $arParams['USER_ID'] = intval($GLOBALS['USER']->getId());
-$arParams['RUBRIC_ID'] = intval($arParams['RUBRIC_ID']);
+$arParams['RUBRIC_ID'] = htmlspecialchars($arParams['RUBRIC_ID']);
 if(empty($arParams['RUBRIC_ID'])) {
 	return;
 }

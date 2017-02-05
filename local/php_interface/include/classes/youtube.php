@@ -49,7 +49,7 @@ class CYouTube {
 	public static function insertHTMLVideo($url, $width = 480, $height = 390) {
 		$yCode = self::getYoutubeCodeFromURL($url);
 		if($yCode !== false) {
-			?><iframe title="YouTube video player" width="<?=$width?>" height="<?=$height?>" src="http://www.youtube.com/embed/<?=$yCode?>" frameborder="0" allowfullscreen></iframe><?
+			?><iframe width="<?=$width?>" height="<?=$height?>" src="http://www.youtube.com/embed/<?=$yCode?>?version=3&enablejsapi=1" frameborder="0" allowfullscreen></iframe><?
 		} else {
 			return false;
 		}

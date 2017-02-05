@@ -69,9 +69,9 @@ $APPLICATION->SetTitle("Видео");
 		"SEF_FOLDER" => "/video/",
 		"SEF_MODE" => "Y",
 		"SET_LAST_MODIFIED" => "N",
-		"SET_STATUS_404" => "N",
+		"SET_STATUS_404" => "Y",
 		"SET_TITLE" => "Y",
-		"SHOW_404" => "N",
+		"SHOW_404" => "Y",
 		"SORT_BY1" => "SORT",
 		"SORT_BY2" => "ACTIVE_FROM",
 		"SORT_ORDER1" => "ASC",
@@ -89,7 +89,8 @@ $APPLICATION->SetTitle("Видео");
 			"news" => "",
 			"section" => "#SECTION_CODE#/",
 			"detail" => "detail/#ELEMENT_CODE#/",
-		)
+		),
+		'PJAX_LINK' => '/video/'
 	),
 	false
 );?>

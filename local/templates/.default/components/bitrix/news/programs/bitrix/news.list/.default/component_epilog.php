@@ -1,6 +1,6 @@
 <?if(!empty($arResult['SECTIONS'])):?>
 	<?itc\CUncachedArea::startCapture('categories-block');?>
-	<?$GLOBALS['APPLICATION']->includeFile('/include/sections.php', array('SECTIONS' => $arResult['SECTIONS']));?>
+	<?$GLOBALS['APPLICATION']->includeFile('/include/sections.php', array('SECTIONS' => $arResult['SECTIONS'], 'PJAX_LINK' => $arParams['PJAX_LINK']));?>
 	<?itc\CUncachedArea::endCapture();?>
 <?endif;?>
 

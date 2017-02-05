@@ -7,6 +7,7 @@ $aMenuLinks = Array(
 		Array(), 
 		"" 
 	),
+	/*
 	Array(
 		"Мой дневник", 
 		"/account/diary/", 
@@ -14,6 +15,7 @@ $aMenuLinks = Array(
 		Array(), 
 		"" 
 	),
+	*/
 	Array(
 		"Выйти", 
 		'/?logout=yes', 

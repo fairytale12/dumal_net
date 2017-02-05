@@ -22,7 +22,7 @@
 	<div class="lessons-list row clearfix">
 		<?foreach($arResult['LESSONS'] as $arLesson):?>
 			<div class="col-md-12">
-				<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">
+				<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">
 					<div class="simple-post lesson-block">
 						<span class="glyphicon <?=($arLesson['IS_COMPLETED'] ? 'glyphicon-check' : 'glyphicon-edit')?>" aria-hidden="true"></span>
 						<h3>
@@ -32,7 +32,7 @@
 						<?if(!empty($arLesson['UF_PICTURE'])):?>
 							<div class="lesson-background" style="background: url(<?=\CFile::getPath($arLesson['UF_PICTURE'])?>) 50% 50% no-repeat;"></div>
 						<?endif;?>
-						<!--<a data-pjax="" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">-->
+						<?/*<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arLesson['LINK']?>" title="<?=$arLesson['UF_NAME']?>">*/?>
 					</div>
 				</a>
 			</div>

@@ -16,8 +16,11 @@ $this->setFrameMode(true);
 	"ft:user.program.lessons",
 	"",
 	Array(
+		'CACHE_TIME' => '3600000',
+		'CACHE_TYPE' => 'N',
 		'PROGRAM_CODE' => $arResult['VARIABLES']['ELEMENT_CODE'],
-		'USER_ID' => $GLOBALS['USER']->getId()
+		'USER_ID' => $GLOBALS['USER']->getId(),
+		'PJAX_LINK' => $arParams['PJAX_LINK']
 	),
 	$component
 );?>

@@ -69,9 +69,9 @@ array(
 	"SEF_FOLDER" => "/programs/",
 	"SEF_MODE" => "Y",
 	"SET_LAST_MODIFIED" => "N",
-	"SET_STATUS_404" => "N",
+	"SET_STATUS_404" => "Y",
 	"SET_TITLE" => "Y",
-	"SHOW_404" => "N",
+	"SHOW_404" => "Y",
 	"SORT_BY1" => "SORT",
 	"SORT_BY2" => "ACTIVE_FROM",
 	"SORT_ORDER1" => "ASC",
@@ -90,6 +90,7 @@ array(
 		"detail" => "detail/#ELEMENT_CODE#/",
 	),
 	"IS_AJAX" => ($_POST["ftAjaxPager"]=="Y"),
+	'PJAX_LINK' => '/programs/'
 ),
 false
 );?>

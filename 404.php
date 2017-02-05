@@ -1,20 +1,20 @@
 <?
 include_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/urlrewrite.php');
 
-CHTTP::SetStatus("404 Not Found");
-@define("ERROR_404","Y");
+CHTTP::SetStatus('404 Not Found');
+@define('ERROR_404','Y');
 
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 
-$APPLICATION->SetTitle("404 Not Found");
+$APPLICATION->SetTitle('404 Страница не найдена');
 
-$APPLICATION->IncludeComponent("bitrix:main.map", ".default", Array(
-	"LEVEL"	=>	"3",
-	"COL_NUM"	=>	"2",
-	"SHOW_DESCRIPTION"	=>	"Y",
-	"SET_TITLE"	=>	"Y",
-	"CACHE_TIME"	=>	"3600"
-	)
-);
+?>
+<div class="row blog-content">
+	<div class="col-md-12">
+		<h3 class='tag-title'>Уупс... <span>Ошибка 404</span></h3>
+		Страница не найдена, однако вы всегда можете перейти <a data-pjax="<?=ft\CHelper::getLinkId('/')?>" href="/">на главную</a>.
+	</div>
+</div>
 
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<?
+require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');?>

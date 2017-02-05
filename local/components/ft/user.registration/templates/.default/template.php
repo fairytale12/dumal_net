@@ -10,17 +10,25 @@
 		}
 	</script>
 <?endif;?>
+<?if($arResult['NEED_TO_REDIRECT']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		parent.window.location.href = '<?=$arResult['NEED_TO_REDIRECT']?>';
+	</script>
+<?endif;?>
+<?if($arResult['NEED_TO_IFRAME']):?>
+	<script type="text/javascript">
+		parent.ftHelper.closeModal();
+		parent.ftHelper.showForm('<?=$arResult['NEED_TO_IFRAME']?>');
+	</script>
+<?endif;?>
 
 <div  class="reg-form">
 	<h1 class="h1--center">Регистрация</h1>
 	<?if(!empty($arResult['ERRORS'])):?>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="alert alert-danger">
-					<?=implode("<br/>", $arResult['ERRORS'])?>
-				</div>
-			</div>
-		</div>
+		<script type="text/javascript">
+			parent.ftHelper.addNotify('<?=implode("<br/>", $arResult['ERRORS'])?>', 'danger', 6000);
+		</script>
 	<?endif;?>
 	<form method="post" action="">
 		
@@ -63,7 +71,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="form-group">
-					<input type="hidden" name="CAPTCHA_CODE" value="">
+					<input type="hidden" name="FORM_CHECK_INPUT" value="<?=$arResult['POST']['FORM_CHECK_INPUT']?>">
 					<input type="submit" class="btn btn-block btn-warning" name="registration" value="Зарегистрироваться">
 				</div>
 			</div>
@@ -76,9 +84,3 @@
 		</div>
 	</div>
 </div>
-
-<?if($_REQUEST['result'] == 'confirm'):?>
-	<script type="text/javascript">
-		parent.ftHelper.showModal('#registration-user-confirm');
-	</script>
-<?endif;?>

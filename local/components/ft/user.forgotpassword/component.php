@@ -3,9 +3,8 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 
 $arResult = array();
 
-if($GLOBALS['USER']->IsAuthorized()) {
-	LocalRedirect('/account/');
-}
+$arResult['NEED_TO_REDIRECT'] = false;
+$arResult['NEED_TO_IFRAME'] = false;
 
 $arResult["CAPTCHA_CODE"] = false;
 $arSession = ft\CHelper::getSession();
@@ -35,6 +34,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['recover']) && !$GLOBAL
 			$arResult['ERRORS'][] = $result['MESSAGE'];
 		} else {
 			LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('result=send', array('result')));
+			
+			$arResult['NEED_TO_IFRAME'] = '/iframe/forgot_password_user_send.php';
 		}
 	}
 	

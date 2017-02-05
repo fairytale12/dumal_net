@@ -45,7 +45,7 @@ $this->setFrameMode(true);
 	</div>
 
 	<footer class="post-meta">
-	
+		<?/*
 		<div class="program-buy-block">	
 			<div class="program-price-block inline-block">
 				<?=ft\CHelper::showPrice($arResult['PROPERTIES']['PRICE']['VALUE'])?>
@@ -55,6 +55,7 @@ $this->setFrameMode(true);
 				<button type="button" class="btn btn-success">Принять участие</button>
 			</div>
 		</div>
+		*/?>
 
 		<div class="share-wrapper clearfix">
 
@@ -71,28 +72,31 @@ $this->setFrameMode(true);
 			<div class="row">
 				
 				<div class="post-nav-wrapper clearfix">
-					<?if(!empty($arResult['NEIGHBORS']['LEFT'])):?>
-						<div class="col-md-6 omega">
+					
+					<div class="col-md-6 omega">
+						<?if(!empty($arResult['NEIGHBORS']['LEFT'])):?>
 							<div class="previous-post">
 								<div class="post-nav-label">
 									<i class="fa fa-angle-left"></i>
 									Предыдущая программа
 								</div>
-								<a data-pjax="" href="<?=$arResult['NEIGHBORS']['LEFT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['LEFT']['NAME']?></a>
+								<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arResult['NEIGHBORS']['LEFT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['LEFT']['NAME']?></a>
 							</div>
-						</div>
-					<?endif;?>
-					<?if(!empty($arResult['NEIGHBORS']['RIGHT'])):?>
-						<div class="col-md-6 alpha text-right">
+						<?endif;?>
+					</div>
+						
+					<div class="col-md-6 alpha">
+						<?if(!empty($arResult['NEIGHBORS']['RIGHT'])):?>
 							<div class="next-post">
 								<div class="post-nav-label">
 									Следующая программа
 									<i class="fa fa-angle-right"></i>
 								</div>
-								<a data-pjax="" href="<?=$arResult['NEIGHBORS']['RIGHT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['RIGHT']['NAME']?></a>
+								<a data-pjax="<?=ft\CHelper::getLinkId($arParams['PJAX_LINK'])?>" href="<?=$arResult['NEIGHBORS']['RIGHT']['DETAIL_PAGE_URL']?>" class="post-nav-title"><?=$arResult['NEIGHBORS']['RIGHT']['NAME']?></a>
 							</div>
-						</div>
-					<?endif;?>
+						<?endif;?>
+					</div>
+					
 				</div>
 			</div>
 		<?endif;?>
