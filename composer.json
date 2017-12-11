@@ -1,0 +1,19 @@
+{
+    "name": "fairytale12/PROP",
+    "description": "",
+    "keywords": [],
+    "type": "library",
+    "homepage": "https://github.com/fairytale12/PROP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vadim Tsvetkov",
+            "email": "myfairytale12@gmail.com",
+            "homepage": "https://github.com/fairytale12",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    } 
+}
